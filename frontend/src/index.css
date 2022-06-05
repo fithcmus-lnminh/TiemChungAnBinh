@@ -2,5 +2,8 @@ body {
 font-family: 'Encode Sans Expanded', sans-serif;  box-sizing: border-box;
 }
 
-
+#nav-dropdown {
+    color: #fff;
+    font-weight: bold;
+}
 
