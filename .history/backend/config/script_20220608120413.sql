@@ -55,7 +55,7 @@ CREATE TABLE DonMuaVaccine (
     TenVaccineKhac VARCHAR(255),
     SoLuong INTEGER,
     MaKH INTEGER,
-    FOREIGN KEY (MaKH) REFERENCES TaiKhoan(MaTaiKhoan)
+    FOREIGN KEY (MaKH) REFERENCES KhachHang(MaKH)
 );
 
 CREATE TABLE DanhSachGoiTiem (

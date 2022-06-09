@@ -5,13 +5,11 @@ import dotenv from "dotenv";
 import { errorHandler } from "./middlewares/errorMiddleware.js";
 import pool from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
 
 app.use(express.json());
 
 dotenv.config();
 app.use("/api/auth", authRoutes);
-app.use("/api", userRoutes);
 
 app.post("/", async (req, res, next) => {
   try {

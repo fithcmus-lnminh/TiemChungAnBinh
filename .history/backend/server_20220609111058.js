@@ -11,7 +11,7 @@ app.use(express.json());
 
 dotenv.config();
 app.use("/api/auth", authRoutes);
-app.use("/api", userRoutes);
+app.use("/api", authRoutes);
 
 app.post("/", async (req, res, next) => {
   try {
