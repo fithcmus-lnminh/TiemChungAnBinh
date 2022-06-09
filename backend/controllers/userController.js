@@ -164,7 +164,7 @@ export async function postRegisterWork(req, res, next) {
   }
 }
 
-export async function getRegisterWorkById(req, res, next) {
+export async function getRegisterWorkByUserId(req, res, next) {
   const userId = parseInt(req.params.userId);
 
   try {

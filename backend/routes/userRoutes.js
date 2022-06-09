@@ -8,7 +8,7 @@ import {
   getRegisterFormByUserId,
   postBuyVaccine,
   postRegisterWork,
-  getRegisterWorkById,
+  getRegisterWorkByUserId,
 } from "../controllers/userController.js";
 import { isAuth } from "../middlewares/authMiddleware.js";
 import { isAdmin } from "../controllers/isAdmin.js";
@@ -32,7 +32,7 @@ router.get(
   "/lay-lich-lam-viec/:userId",
   isAuth,
   isEmployee,
-  getRegisterWorkById
+  getRegisterWorkByUserId
 );
 
 export default router;
