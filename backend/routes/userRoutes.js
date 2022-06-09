@@ -7,9 +7,11 @@ import {
   getAllRegisterForms,
   getRegisterFormByUserId,
   postBuyVaccine,
+  postRegisterWork,
 } from "../controllers/userController.js";
 import { isAuth } from "../middlewares/authMiddleware.js";
 import { isAdmin } from "../controllers/isAdmin.js";
+import { isEmployee } from "../controllers/isEmployee.js";
 
 const router = express.Router();
 
@@ -24,5 +26,6 @@ router.get(
   getRegisterFormByUserId
 );
 router.post("/mua-vaccine", isAuth, postBuyVaccine);
+router.post("/dang-ky-lich-lam-viec", isAuth, isEmployee, postRegisterWork);
 
 export default router;

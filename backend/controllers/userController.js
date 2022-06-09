@@ -145,3 +145,23 @@ export async function postBuyVaccine(req, res, next) {
     next(err);
   }
 }
+
+export async function postRegisterWork(req, res, next) {
+  const { ngaylamviec, calamviec, manv } = req.body;
+
+  try {
+    const registerWork = await pool.query(
+      "INSERT INTO lichlamviec(ngaylamviec, calamviec, manv) VALUES ($1, $2, $3) RETURNING *",
+      [ngaylamviec, calamviec, parseInt(manv)]
+    );
+
+    if (registerWork.rowCount > 0) {
+      res.status(201).json(registerWork.rows[0]);
+    } else {
+      res.status(400);
+      throw new Error("Không thể đăng ký ca làm việc.");
+    }
+  } catch (err) {
+    next(err);
+  }
+}
