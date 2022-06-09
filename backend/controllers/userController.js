@@ -125,3 +125,23 @@ export async function getRegisterFormByUserId(req, res, next) {
     next(err);
   }
 }
+
+export async function postBuyVaccine(req, res, next) {
+  const { tenvaccine, tenvaccinekhac, soluong, makh } = req.body;
+
+  try {
+    const vaccineOrder = await pool.query(
+      "INSERT INTO donmuavaccine(tenvaccine, tenvaccinekhac, soluong, makh) VALUES ($1, $2, $3, $4) RETURNING *",
+      [tenvaccine, tenvaccinekhac, parseInt(soluong), parseInt(makh)]
+    );
+
+    if (vaccineOrder.rowCount > 0) {
+      res.status(201).json(vaccineOrder.rows[0]);
+    } else {
+      res.status(400);
+      throw new Error("Không thể mua vaccine.");
+    }
+  } catch (err) {
+    next(err);
+  }
+}

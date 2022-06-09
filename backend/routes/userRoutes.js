@@ -6,6 +6,7 @@ import {
   postRegisterForm,
   getAllRegisterForms,
   getRegisterFormByUserId,
+  postBuyVaccine,
 } from "../controllers/userController.js";
 import { isAuth } from "../middlewares/authMiddleware.js";
 import { isAdmin } from "../controllers/isAdmin.js";
@@ -22,5 +23,6 @@ router.get(
   isAuth,
   getRegisterFormByUserId
 );
+router.post("/mua-vaccine", isAuth, postBuyVaccine);
 
 export default router;
