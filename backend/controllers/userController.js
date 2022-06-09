@@ -105,3 +105,23 @@ export async function getAllRegisterForms(req, res, next) {
     next(err);
   }
 }
+
+export async function getRegisterFormByUserId(req, res, next) {
+  const userId = parseInt(req.params.userId);
+
+  try {
+    const forms = await pool.query(
+      "SELECT * FROM phieudangky WHERE makh = $1",
+      [userId]
+    );
+
+    if (forms.rowCount > 0) {
+      res.status(201).json(forms.rows);
+    } else {
+      res.status(400);
+      throw new Error("Không có sẵn phiếu đăng ký nào.");
+    }
+  } catch (err) {
+    next(err);
+  }
+}
