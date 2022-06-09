@@ -46,7 +46,25 @@ export async function getAllUsers(req, res, next) {
       res.status(201).json(users.rows);
     } else {
       res.status(400);
-      throw new Error("Không tìm thấy người dùng.");
+      throw new Error("Không tìm thấy khách hàng.");
+    }
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function getAllEmployees(req, res, next) {
+  try {
+    const users = await pool.query(
+      "SELECT mataikhoan, email, hoten, ngaysinh, dienthoai, gioitinh, diachi, vaitro FROM TaiKhoan WHERE vaitro = $1",
+      ["Nhan Vien"]
+    );
+
+    if (users.rowCount > 0) {
+      res.status(201).json(users.rows);
+    } else {
+      res.status(400);
+      throw new Error("Không tìm thấy nhân viên.");
     }
   } catch (err) {
     next(err);
