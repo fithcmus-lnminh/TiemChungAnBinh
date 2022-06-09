@@ -34,3 +34,21 @@ export async function deleteEmployee(req, res, next) {
     next(err);
   }
 }
+
+export async function getAllUsers(req, res, next) {
+  try {
+    const users = await pool.query(
+      "SELECT mataikhoan, email, hoten, ngaysinh, dienthoai, gioitinh, diachi, vaitro FROM TaiKhoan WHERE vaitro = $1",
+      ["Khach Hang"]
+    );
+
+    if (users.rowCount > 0) {
+      res.status(201).json(users.rows);
+    } else {
+      res.status(400);
+      throw new Error("Không tìm thấy người dùng.");
+    }
+  } catch (err) {
+    next(err);
+  }
+}
