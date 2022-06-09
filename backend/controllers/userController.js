@@ -74,8 +74,6 @@ export async function getAllEmployees(req, res, next) {
 export async function postRegisterForm(req, res, next) {
   const { makh, loaitiem, goitiem, loaivaccine, ngaytiem } = req.body;
 
-  console.log(("body:", req.body));
-
   try {
     const form = await pool.query(
       "INSERT INTO phieudangky(makh, loaitiem, goitiem, loaivaccine, ngaytiem) VALUES ($1, $2, $3, $4, $5) RETURNING *",
@@ -83,7 +81,22 @@ export async function postRegisterForm(req, res, next) {
     );
 
     if (form.rowCount > 0) {
-      res.status(201).json(form.rows);
+      res.status(201).json(form.rows[0]);
+    } else {
+      res.status(400);
+      throw new Error("Không thể thêm phiếu đăng ký.");
+    }
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function getAllRegisterForms(req, res, next) {
+  try {
+    const forms = await pool.query("SELECT * FROM phieudangky");
+
+    if (forms.rowCount > 0) {
+      res.status(201).json(forms.rows);
     } else {
       res.status(400);
       throw new Error("Không có sẵn phiếu đăng ký nào.");
