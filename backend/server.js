@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import { errorHandler } from "./middlewares/errorMiddleware.js";
 import pool from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 app.use(express.json());
 
@@ -25,7 +26,7 @@ app.post("/", async (req, res, next) => {
   }
 });
 
-// app.use("/api/users", userRoutes);
+app.use("/api/users", userRoutes);
 
 app.use(errorHandler);
 
