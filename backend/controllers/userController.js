@@ -1,6 +1,4 @@
 import pool from "../config/db.js";
-import bcrypt from "bcryptjs";
-import generateToken from "../utils/generateToken.js";
 
 export async function deleteEmployee(req, res, next) {
   const userId = parseInt(req.params.userId);
@@ -160,6 +158,26 @@ export async function postRegisterWork(req, res, next) {
     } else {
       res.status(400);
       throw new Error("Không thể đăng ký ca làm việc.");
+    }
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function getRegisterWorkById(req, res, next) {
+  const userId = parseInt(req.params.userId);
+
+  try {
+    const registerWork = await pool.query(
+      "SELECT * FROM lichlamviec WHERE manv = $1",
+      [userId]
+    );
+
+    if (registerWork.rowCount > 0) {
+      res.status(201).json(registerWork.rows);
+    } else {
+      res.status(400);
+      throw new Error("Nhân viên này không có lịch làm việc.");
     }
   } catch (err) {
     next(err);

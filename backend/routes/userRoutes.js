@@ -8,6 +8,7 @@ import {
   getRegisterFormByUserId,
   postBuyVaccine,
   postRegisterWork,
+  getRegisterWorkById,
 } from "../controllers/userController.js";
 import { isAuth } from "../middlewares/authMiddleware.js";
 import { isAdmin } from "../controllers/isAdmin.js";
@@ -27,5 +28,11 @@ router.get(
 );
 router.post("/mua-vaccine", isAuth, postBuyVaccine);
 router.post("/dang-ky-lich-lam-viec", isAuth, isEmployee, postRegisterWork);
+router.get(
+  "/lay-lich-lam-viec/:userId",
+  isAuth,
+  isEmployee,
+  getRegisterWorkById
+);
 
 export default router;
