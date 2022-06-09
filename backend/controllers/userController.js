@@ -70,3 +70,25 @@ export async function getAllEmployees(req, res, next) {
     next(err);
   }
 }
+
+export async function postRegisterForm(req, res, next) {
+  const { makh, loaitiem, goitiem, loaivaccine, ngaytiem } = req.body;
+
+  console.log(("body:", req.body));
+
+  try {
+    const form = await pool.query(
+      "INSERT INTO phieudangky(makh, loaitiem, goitiem, loaivaccine, ngaytiem) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+      [parseInt(makh), loaitiem, goitiem, loaivaccine, ngaytiem]
+    );
+
+    if (form.rowCount > 0) {
+      res.status(201).json(form.rows);
+    } else {
+      res.status(400);
+      throw new Error("Không có sẵn phiếu đăng ký nào.");
+    }
+  } catch (err) {
+    next(err);
+  }
+}

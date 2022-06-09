@@ -25,7 +25,7 @@ CREATE TABLE PhieuDangKy (
     MaPhieu INTEGER PRIMARY KEY,
     MaKH INTEGER,
     LoaiTiem VARCHAR(50),
-    GoiTiem VARCHAR(20)[],
+    GoiTiem VARCHAR(50)[],
     LoaiVaccine VARCHAR(20),
     NgayTiem DATE,
     FOREIGN KEY (MaKH) REFERENCES TaiKhoan(MaTaiKhoan)
