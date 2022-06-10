@@ -11,9 +11,22 @@ app.use(express.json());
 
 dotenv.config();
 app.use("/api/auth", authRoutes);
-app.use("/api", userRoutes);
 
-app.use("/api/users", userRoutes);
+app.post("/", async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const newUser = await pool.query(
+      "insert into TaiKhoan(email,password) values ($1, $2) returning *;",
+      [email, password]
+    );
+
+    res.json(newUser);
+  } catch (err) {
+    console.log(err.message);
+  }
+});
+
+// app.use("/api/users", userRoutes);
 
 app.use(errorHandler);
 
