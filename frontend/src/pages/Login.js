@@ -6,20 +6,29 @@ import { withFormik } from "formik";
 import * as Yup from "yup";
 import { connect, useSelector } from "react-redux";
 import { login } from "../redux/apiRequests/userRequest";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const Login = (props) => {
-  const { values, touched, errors, handleChange, handleBlur, handleSubmit } =
-    props;
+  const { touched, errors, handleChange, handleSubmit } = props;
 
-  const { isLoading, isSuccess, errorMessage } = useSelector(
+  const { userInfo, isLoading, isSuccess, errorMessage } = useSelector(
     (state) => state.user
   );
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirect = searchParams.get("redirect")
+    ? searchParams.get("redirect")
+    : "";
 
   useEffect(() => {
     isSuccess && navigate("/");
   }, [isSuccess, navigate]);
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate(`/${redirect}`);
+    }
+  }, [navigate, userInfo, redirect]);
 
   return (
     <Auth>
@@ -68,7 +77,10 @@ const Login = (props) => {
           </Button>
 
           <h6 className="mt-3 mb-0">
-            Bạn chưa có tài khoản? <a href="/register">Đăng ký ngay</a>
+            Bạn chưa có tài khoản?{" "}
+            <a href={redirect ? `/register?redirect=${redirect}` : "/register"}>
+              Đăng ký ngay
+            </a>
           </h6>
         </div>
       </form>

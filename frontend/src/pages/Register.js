@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Input, Button } from "antd";
 import Auth from "../components/Auth";
 import {
@@ -8,11 +8,32 @@ import {
 } from "@ant-design/icons";
 import { withFormik } from "formik";
 import * as Yup from "yup";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
+import { register } from "../redux/apiRequests/userRequest";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const Register = (props) => {
-  const { values, touched, errors, handleChange, handleBlur, handleSubmit } =
-    props;
+  const { touched, errors, handleChange, handleSubmit } = props;
+
+  const { userInfo, isLoading, isSuccess, errorMessage } = useSelector(
+    (state) => state.user
+  );
+
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirect = searchParams.get("redirect")
+    ? searchParams.get("redirect")
+    : "";
+
+  useEffect(() => {
+    isSuccess && navigate("/");
+  }, [isSuccess, navigate]);
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate(`/${redirect}`);
+    }
+  }, [navigate, userInfo, redirect]);
 
   return (
     <Auth>
@@ -23,6 +44,9 @@ const Register = (props) => {
         >
           <div className="w-75">
             <h3 className="text-center mb-3">Đăng ký</h3>
+            {errorMessage && (
+              <div className="text-danger mb-3 text-center">{errorMessage}</div>
+            )}
             <Input
               size="large"
               placeholder="Họ tên"
@@ -52,7 +76,7 @@ const Register = (props) => {
               size="large"
               name="password"
               onChange={handleChange}
-              placeholder="Password"
+              placeholder="Mật khẩu"
               className="mt-3"
               prefix={<LockOutlined />}
             />
@@ -64,7 +88,7 @@ const Register = (props) => {
               size="large"
               name="confirmPassword"
               onChange={handleChange}
-              placeholder="Password"
+              placeholder="Nhập lại mật khẩu"
               className="mt-3"
               prefix={<LockOutlined />}
             />
@@ -77,12 +101,16 @@ const Register = (props) => {
             size="middle"
             className="mt-4 w-75"
             style={{ backgroundColor: "rgb(102,117,223)", color: "#fff" }}
+            disabled={isLoading}
           >
             Đăng ký
           </Button>
 
           <h6 className="mt-3 mb-0">
-            Bạn đã có tài khoản? <a href="/login">Đăng nhập</a>
+            Bạn đã có tài khoản?{" "}
+            <a href={redirect ? `/login?redirect=${redirect}` : "/login"}>
+              Đăng nhập
+            </a>
           </h6>
         </div>
       </form>
@@ -110,14 +138,21 @@ const RegisterWithFormik = withFormik({
       .required("Vui lòng nhập mật khẩu")
       .oneOf([Yup.ref("password"), null], "Mật khẩu không khớp"),
     name: Yup.string().required("Vui lòng nhập họ tên"),
-    phone: Yup.string().required("Vui lòng nhập số điện thoại"),
   }), //validate from field
 
   handleSubmit: (values, { props, setSubmitting }) => {
-    // props.dispatch(loginAction(values.email, values.password));
+    console.log(values);
+    props.dispatch(
+      register({
+        name: values.name,
+        email: values.email,
+        password: values.password,
+        role: "Khach Hang",
+      })
+    );
   },
 
   displayName: "Register",
 })(Register);
 
-export default RegisterWithFormik;
+export default connect()(RegisterWithFormik);

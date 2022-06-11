@@ -13,6 +13,7 @@ import {
 import Select from "react-select";
 import { withFormik } from "formik";
 import * as Yup from "yup";
+import { useSelector } from "react-redux";
 
 const vaccinePackageData = [
   {
@@ -45,7 +46,6 @@ const SignUpVaccination = (props) => {
   const { values, touched, errors, handleChange, handleSubmit, setFieldValue } =
     props;
 
-  console.log(errors);
   useEffect(() => {
     const currentYear = new Date().getFullYear();
     const pickedYear = new Date(values.dob).getFullYear();

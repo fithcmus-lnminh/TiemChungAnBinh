@@ -5,7 +5,7 @@ import {
   logout,
 } from "../slices/userSlice";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { openNotification } from "../../utils/notification";
 
 export const login = (obj) => async (dispatch) => {
   dispatch(loginRequest());
@@ -30,4 +30,33 @@ export const signout = () => async (dispatch, getState) => {
 
   dispatch(logout());
   // dispatch({ type: GET_USER_DETAILS_RESET });
+};
+
+export const register = (obj) => async (dispatch, getState) => {
+  try {
+    dispatch(loginRequest());
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.post("/api/auth/register", obj, config);
+
+    dispatch(loginSuccess(data));
+    console.log(data);
+
+    sessionStorage.setItem("userInfo", JSON.stringify(data));
+    openNotification("success", "Đăng ký tài khoản thành công");
+  } catch (err) {
+    console.log(err);
+    dispatch(
+      loginFail(
+        err.response && err.response.data.errors.message
+          ? err.response.data.errors.message
+          : err.message
+      )
+    );
+  }
 };
