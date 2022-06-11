@@ -38,15 +38,7 @@ const Navbar = (props) => {
         </MobileIcon>
         <NavMenu>
           <NavItem>
-            <NavLinks
-              to={
-                userInfo
-                  ? "/signup-vaccination"
-                  : "/login?redirect=signup-vaccination"
-              }
-            >
-              Đăng ký tiêm
-            </NavLinks>
+            <NavLinks to="/signup-vaccination">Đăng ký tiêm</NavLinks>
           </NavItem>
           <NavItem>
             <NavLinks to="/buy-vaccine">Mua vắc xin</NavLinks>

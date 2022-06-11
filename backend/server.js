@@ -13,8 +13,6 @@ dotenv.config();
 app.use("/api/auth", authRoutes);
 app.use("/api", userRoutes);
 
-app.use("/api/users", userRoutes);
-
 app.use(errorHandler);
 
 app.listen(port, () =>

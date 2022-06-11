@@ -333,12 +333,46 @@ export async function getAllEmployees(req, res, next) {
 }
 
 export async function postRegisterForm(req, res, next) {
-  const { makh, loaitiem, goitiem, loaivaccine, ngaytiem } = req.body;
+  const {
+    makh,
+    hotennguoitiem,
+    ngaysinh,
+    gioitinh,
+    sodienthoai,
+    diachi,
+    loaitiem,
+    goitiem,
+    loaivaccine,
+    ngaytiem,
+    tenngh,
+    moiquanhe,
+    sdtngh,
+  } = req.body;
 
   try {
+    let ngh = null;
+    if (tenngh && moiquanhe && sdtngh) {
+      ngh = await pool.query(
+        "INSERT INTO nguoigiamho(hotenngh, moiquanhe, sodienthoai) VALUES ($1,$2,$3) RETURNING *",
+        [tenngh, moiquanhe, sdtngh]
+      );
+    }
+
     const form = await pool.query(
-      "INSERT INTO phieudangky(makh, loaitiem, goitiem, loaivaccine, ngaytiem) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-      [parseInt(makh), loaitiem, goitiem, loaivaccine, ngaytiem]
+      "INSERT INTO phieudangky(makh, hotennguoitiem, ngaysinh, gioitinh, dienthoai, diachi, loaitiem, goitiem, loaivaccine, ngaytiem, mangh) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *",
+      [
+        makh ? parseInt(makh) : null,
+        hotennguoitiem,
+        ngaysinh,
+        gioitinh,
+        sodienthoai,
+        diachi,
+        loaitiem,
+        goitiem,
+        loaivaccine,
+        ngaytiem,
+        ngh ? ngh.rows[0].mangh : null,
+      ]
     );
 
     if (form.rowCount > 0) {

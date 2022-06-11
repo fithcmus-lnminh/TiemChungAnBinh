@@ -13,7 +13,8 @@ import {
 import Select from "react-select";
 import { withFormik } from "formik";
 import * as Yup from "yup";
-import { useSelector } from "react-redux";
+import { connect, useSelector } from "react-redux";
+import { dangkytiem } from "../../redux/apiRequests/dktRequest";
 
 const vaccinePackageData = [
   {
@@ -69,7 +70,6 @@ const SignUpVaccination = (props) => {
                 <Form.Control
                   type="text"
                   placeholder="Nhập tên người tiêm"
-                  value={values.name}
                   onChange={handleChange}
                 ></Form.Control>
                 {errors.name && touched.name && (
@@ -137,8 +137,10 @@ const SignUpVaccination = (props) => {
                 <FormLabel>Mã khách hàng</FormLabel>
                 <Form.Control
                   type="text"
-                  placeholder="Nhập mã KH"
+                  placeholder="Không có"
+                  value={values.customerId && "KH" + values.customerId}
                   onChange={handleChange}
+                  disabled
                 ></Form.Control>
               </FormGroup>
               {errors.customerId && touched.customerId && (
@@ -151,14 +153,13 @@ const SignUpVaccination = (props) => {
             <>
               <Row>
                 <Col md={4}>
-                  <FormGroup controlId="name">
+                  <FormGroup controlId="guardianName">
                     <FormLabel>
                       Họ tên người giám hộ <TextRed>(*)</TextRed>
                     </FormLabel>
                     <Form.Control
                       type="text"
                       placeholder="Nhập tên người giám hộ"
-                      value={values.guardianName}
                       onChange={handleChange}
                     ></Form.Control>
                     {errors.guardianName && touched.guardianName && (
@@ -167,14 +168,13 @@ const SignUpVaccination = (props) => {
                   </FormGroup>
                 </Col>
                 <Col md={4}>
-                  <FormGroup controlId="name">
+                  <FormGroup controlId="relationship">
                     <FormLabel>
                       Mối quan hệ <TextRed>(*)</TextRed>
                     </FormLabel>
                     <Form.Control
                       type="text"
                       placeholder="Nhập mối quan hệ"
-                      value={values.relationship}
                       onChange={handleChange}
                     ></Form.Control>
                     {errors.relationship && touched.relationship && (
@@ -183,7 +183,7 @@ const SignUpVaccination = (props) => {
                   </FormGroup>
                 </Col>
                 <Col md={4}>
-                  <FormGroup controlId="phoneNumber">
+                  <FormGroup controlId="guardianPhone">
                     <FormLabel>
                       Điện thoại liên hệ<TextRed>(*)</TextRed>
                     </FormLabel>
@@ -196,7 +196,6 @@ const SignUpVaccination = (props) => {
                         )
                       }
                       onInput={(e) => e.target.setCustomValidity("")}
-                      value={values.guardianPhone}
                       onChange={handleChange}
                       pattern="^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$"
                     ></Form.Control>
@@ -248,7 +247,7 @@ const SignUpVaccination = (props) => {
             <>
               <Row>
                 <Col>
-                  <FormGroup controlId="name">
+                  <FormGroup controlId="vacPackage">
                     <FormLabel>
                       Gói tiêm <TextRed>(*)</TextRed>
                     </FormLabel>
@@ -287,15 +286,11 @@ const SignUpVaccination = (props) => {
             <>
               <Row>
                 <Col>
-                  <FormGroup controlId="typeVac">
+                  <FormGroup controlId="typeVaccine">
                     <FormLabel>
                       Loại vắc xin <TextRed>(*)</TextRed>
                     </FormLabel>
-                    <Form.Control
-                      as="select"
-                      value={values.typeVaccine}
-                      onChange={handleChange}
-                    >
+                    <Form.Control as="select" onChange={handleChange}>
                       <option value="" disabled>
                         Chọn loại vaccine...
                       </option>
@@ -342,7 +337,7 @@ const SignUpVaccination = (props) => {
 };
 
 const SignUpVaccinationWithFormik = withFormik({
-  mapPropsToValues: () => ({
+  mapPropsToValues: (props) => ({
     name: "",
     dob: "1990-01-01",
     gender: "Male",
@@ -356,7 +351,7 @@ const SignUpVaccinationWithFormik = withFormik({
     vacDate: "",
     typeVaccine: "",
     isChild: false,
-    customerId: "",
+    customerId: props.customerId ?? "",
   }),
 
   validationSchema: Yup.object().shape({
@@ -388,16 +383,34 @@ const SignUpVaccinationWithFormik = withFormik({
   }),
 
   handleSubmit: (values, { props }) => {
-    console.log(
-      values.name,
-      values.dob,
-      values.gender,
-      values.phone,
-      values.customerId
+    let packages = [];
+    values.vacPackage.map((p) => {
+      packages.push(p.value);
+    });
+    props.dispatch(
+      dangkytiem({
+        makh: values.customerId,
+        hotennguoitiem: values.name,
+        ngaysinh: values.dob,
+        gioitinh: values.gender,
+        sodienthoai: values.phone,
+        diachi: values.address,
+        loaitiem: values.type,
+        goitiem: packages,
+        loaivaccine: values.typeVaccine,
+        ngaytiem: values.vacDate,
+        tenngh: values.guardianName,
+        moiquanhe: values.relationship,
+        sdtngh: values.guardianPhone,
+      })
     );
   },
 
   displayName: "SignUpVaccination",
 })(SignUpVaccination);
 
-export default SignUpVaccinationWithFormik;
+const mapStateToProps = (state) => ({
+  customerId: state.user?.userInfo?.MaTaiKhoan,
+});
+
+export default connect(mapStateToProps)(SignUpVaccinationWithFormik);

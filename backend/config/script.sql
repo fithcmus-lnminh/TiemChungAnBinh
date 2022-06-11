@@ -17,17 +17,23 @@ CREATE TABLE TaiKhoan (
     GioiTinh VARCHAR(5),
     DiaChi VARCHAR(255),
     VaiTro VARCHAR(50),
-    MaNGH INTEGER,
-    FOREIGN KEY (MaNGH) REFERENCES NguoiGiamHo(MaNGH)
+    
 );
 
 CREATE TABLE PhieuDangKy (
     MaPhieu INTEGER PRIMARY KEY,
     MaKH INTEGER,
+    HoTenNguoiTiem VARCHAR(255),
+    NgaySinh DATE,
+    GioiTinh VARCHAR(5),
+    DienThoai VARCHAR(15),
+    DiaChi VARCHAR(255),
     LoaiTiem VARCHAR(50),
-    GoiTiem VARCHAR(50)[],
+    GoiTiem VARCHAR(255)[],
     LoaiVaccine VARCHAR(20),
     NgayTiem DATE,
+    MaNGH INTEGER,
+    FOREIGN KEY (MaNGH) REFERENCES NguoiGiamHo(MaNGH)
     FOREIGN KEY (MaKH) REFERENCES TaiKhoan(MaTaiKhoan)
 );
 
