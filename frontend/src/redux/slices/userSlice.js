@@ -23,8 +23,13 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.errorMessage = action.payload;
     },
+    logout(state) {
+      state.userInfo = null;
+      state.isSuccess = null;
+    },
   },
 });
 
-export const { loginRequest, loginSuccess, loginFail } = userSlice.actions;
+export const { loginRequest, loginSuccess, loginFail, logout } =
+  userSlice.actions;
 export default userSlice.reducer;

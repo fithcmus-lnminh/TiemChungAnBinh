@@ -22,12 +22,12 @@ import {
 } from "../controllers/userController.js";
 import { isStaff } from "../middlewares/isStaff.js";
 import { isAuth } from "../middlewares/authMiddleware.js";
-import { isAdmin } from "../controllers/isAdmin.js";
-import { isEmployee } from "../controllers/isEmployee.js";
+import { isAdmin } from "../middlewares/isAdmin.js";
+import { isEmployee } from "../middlewares/isEmployee.js";
 
 const router = express.Router();
 
-router.put("/thanh-toan/:ma-hoa-don", updateBill);
+router.put("/thanh-toan/:mahoadon", updateBill);
 router.get("/lay-thong-tin-mua-vaccine/:userid", getInformationBuyVaccine);
 router.get("/lay-thong-tin-hoa-don/:userid", getBillByUserID);
 router.post("/them-goi-tiem", isStaff, addVaccinePackage);

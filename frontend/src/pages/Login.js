@@ -12,7 +12,9 @@ const Login = (props) => {
   const { values, touched, errors, handleChange, handleBlur, handleSubmit } =
     props;
 
-  const { isLoading, isSuccess } = useSelector((state) => state.user);
+  const { isLoading, isSuccess, errorMessage } = useSelector(
+    (state) => state.user
+  );
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,6 +30,9 @@ const Login = (props) => {
         >
           <div className="w-75">
             <h3 className="text-center mb-3">Đăng nhập</h3>
+            {errorMessage && (
+              <div className="text-danger mb-3 text-center">{errorMessage}</div>
+            )}
             <Input
               size="large"
               placeholder="Email"

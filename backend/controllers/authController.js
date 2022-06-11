@@ -14,7 +14,7 @@ export async function authUser(req, res, next) {
       user.rowCount > 0 &&
       (await bcrypt.compare(password, user.rows[0].password))
     ) {
-      res.json({
+      res.status(200).json({
         MaTaiKhoan: user.rows[0].mataikhoan,
         HoTen: user.rows[0].hoten,
         Email: user.rows[0].email,

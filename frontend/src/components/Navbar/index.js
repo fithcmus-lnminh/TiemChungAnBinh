@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   MobileIcon,
   Nav,
@@ -11,14 +11,23 @@ import {
   NavMenu,
 } from "./NavbarElement";
 import { FaBars } from "react-icons/fa";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NavDropdown } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { signout } from "../../redux/apiRequests/userRequest";
 
 const Navbar = (props) => {
   const { toggle, isHome } = props;
 
   const { userInfo } = useSelector((state) => state.user);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const logoutHandler = () => {
+    dispatch(signout());
+    navigate("/");
+  };
 
   return (
     <Nav isHome={isHome}>
@@ -61,7 +70,7 @@ const Navbar = (props) => {
                   <i className="fas fa-key me-2"></i>Đổi mật khẩu
                 </NavDropdown.Item>
               </Link>
-              <NavDropdown.Item>
+              <NavDropdown.Item onClick={logoutHandler}>
                 <i className="fas fa-arrow-right-from-bracket me-2"></i>
                 Đăng xuất
               </NavDropdown.Item>

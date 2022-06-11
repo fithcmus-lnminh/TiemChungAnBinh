@@ -1,7 +1,7 @@
 import pool from "../config/db.js";
 
 export async function updateBill(req, res, next) {
-  const billId = req.params.ma - hoa - don;
+  const billId = req.params.mahoadon;
   const { SoTienThanhToan } = req.body;
 
   try {
