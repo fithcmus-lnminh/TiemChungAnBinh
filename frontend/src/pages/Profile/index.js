@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Container, Form, Row } from "react-bootstrap";
-import { connect, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import Header from "../../components/Header";
 import {
   ButtonSubmit,
   ButtonWrapper,
   ProfileContainer,
   ProfileH2,
-  ProfileP,
 } from "./ProfileElement";
 import * as Yup from "yup";
 import { withFormik } from "formik";
+import { getProfile } from "../../redux/apiRequests/getProfileRequest";
 
 const Profile = (props) => {
   const { values, touched, errors, handleChange, handleSubmit, setFieldValue } =
@@ -18,7 +18,7 @@ const Profile = (props) => {
 
   const [isEdit, setIsEdit] = useState(false);
 
-  const { userInfo } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   return (
     <>
@@ -85,14 +85,12 @@ const Profile = (props) => {
               </Form.Group>
             </Col>
             <Col md={6}>
-              <Form.Group controlId="phone" className="mt-3">
-                <Form.Label>Số điện thoại</Form.Label>
+              <Form.Group controlId="role" className="mt-3">
+                <Form.Label>Vai trò</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Nhập số điện thoại"
-                  value={values.phone}
-                  onChange={handleChange}
-                  disabled={!isEdit}
+                  value={values.role}
+                  disabled
                 ></Form.Control>
               </Form.Group>
             </Col>
@@ -109,12 +107,14 @@ const Profile = (props) => {
             ></Form.Control>
           </Form.Group>
 
-          <ButtonWrapper className="mt-3">
-            <ButtonSubmit secondary onClick={() => setIsEdit(false)}>
-              Hủy bỏ
-            </ButtonSubmit>
-            <ButtonSubmit className="ms-3">Cập nhật</ButtonSubmit>
-          </ButtonWrapper>
+          {isEdit && (
+            <ButtonWrapper className="mt-3">
+              <ButtonSubmit secondary onClick={() => setIsEdit(false)}>
+                Hủy bỏ
+              </ButtonSubmit>
+              <ButtonSubmit className="ms-3">Cập nhật</ButtonSubmit>
+            </ButtonWrapper>
+          )}
         </Form>
       </ProfileContainer>
     </>
@@ -128,6 +128,7 @@ const ProfileWithFormik = withFormik({
     gender: props.gender ?? "",
     phone: props.phone ?? "",
     address: props.address ?? "",
+    role: props.role ?? "",
   }),
 
   validationSchema: Yup.object().shape({
@@ -140,11 +141,12 @@ const ProfileWithFormik = withFormik({
 })(Profile);
 
 const mapStateToProps = (state) => ({
-  name: state.user?.userInfo?.HoTen,
-  dob: state.user?.userInfo?.NgaySinh,
-  gender: state.user?.userInfo?.GioiTinh,
-  phone: state.user?.userInfo?.DienThoai,
-  address: state.user?.userInfo?.DiaChi,
+  name: state.userProfile?.userProfile?.hoten,
+  dob: state.userProfile?.userProfile?.ngaysinh,
+  gender: state.userProfile?.userProfile?.gioitinh,
+  phone: state.userProfile?.userProfile?.dienthoai,
+  address: state.userProfile?.userProfile?.diachi,
+  role: state.userProfile?.userProfile?.vaitro,
 });
 
 export default connect(mapStateToProps)(ProfileWithFormik);

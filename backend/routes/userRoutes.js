@@ -19,6 +19,7 @@ import {
   postBuyVaccine,
   postRegisterWork,
   getRegisterWorkByUserId,
+  getUserProfile,
 } from "../controllers/userController.js";
 import { isStaff } from "../middlewares/isStaff.js";
 import { isAuth } from "../middlewares/authMiddleware.js";
@@ -27,6 +28,7 @@ import { isEmployee } from "../middlewares/isEmployee.js";
 
 const router = express.Router();
 
+router.get("/thong-tin-tai-khoan/:id", isAuth, getUserProfile);
 router.put("/thanh-toan/:mahoadon", updateBill);
 router.get("/lay-thong-tin-mua-vaccine/:userid", getInformationBuyVaccine);
 router.get("/lay-thong-tin-hoa-don/:userid", getBillByUserID);

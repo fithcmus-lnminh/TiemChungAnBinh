@@ -71,6 +71,11 @@ const Navbar = (props) => {
                   <i className="fas fa-user me-2"></i>Hồ sơ cá nhân
                 </NavDropdown.Item>
               </Link>
+              <Link to="/my-bill">
+                <NavDropdown.Item as="div">
+                  <i className="fas fa-wallet me-2"></i>Hóa đơn của tôi
+                </NavDropdown.Item>
+              </Link>
               <Link to="/change-password">
                 <NavDropdown.Item as="div">
                   <i className="fas fa-key me-2"></i>Đổi mật khẩu

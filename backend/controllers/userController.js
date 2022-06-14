@@ -1,5 +1,25 @@
 import pool from "../config/db.js";
 
+export const getUserProfile = async (req, res, next) => {
+  const userId = req.params.id;
+
+  try {
+    const user = await pool.query(
+      "SELECT hoten, ngaysinh, dienthoai, gioitinh, diachi, vaitro FROM TaiKhoan WHERE mataikhoan = $1",
+      [parseInt(userId)]
+    );
+
+    if (user.rowCount > 0) {
+      res.status(200).json(user.rows[0]);
+    } else {
+      res.status(400);
+      throw new Error("Không tìm thấy khách hàng");
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
 export async function updateBill(req, res, next) {
   const billId = req.params.mahoadon;
   const { SoTienThanhToan } = req.body;
