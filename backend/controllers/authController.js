@@ -19,6 +19,7 @@ export async function authUser(req, res, next) {
         HoTen: user.rows[0].hoten,
         Email: user.rows[0].email,
         VaiTro: user.rows[0].vaitro,
+        DienThoai: user.rows[0].dienthoai,
         token: generateToken(user.rows[0].mataikhoan),
       });
     } else {
@@ -32,7 +33,7 @@ export async function authUser(req, res, next) {
 }
 
 export async function registerUser(req, res, next) {
-  const { name, email, password, role } = req.body;
+  const { name, phone, email, password, role } = req.body;
 
   try {
     const userExists = await pool.query(
@@ -49,8 +50,8 @@ export async function registerUser(req, res, next) {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const user = await pool.query(
-      "INSERT INTO TaiKhoan(email, password, hoten, vaitro) VALUES ($1, $2, $3, $4) RETURNING *",
-      [email, hashedPassword, name, role]
+      "INSERT INTO TaiKhoan(email, password, hoten, dienthoai, vaitro) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+      [email, hashedPassword, name, phone, role]
     );
 
     if (user.rowCount > 0) {
@@ -59,6 +60,7 @@ export async function registerUser(req, res, next) {
         HoTen: user.rows[0].hoten,
         Email: user.rows[0].email,
         VaiTro: user.rows[0].vaitro,
+        DienThoai: user.rows[0].dienthoai,
         token: generateToken(user.rows[0].mataikhoan),
       });
     } else {

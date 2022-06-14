@@ -5,6 +5,7 @@ import {
   UserOutlined,
   LockOutlined,
   FontSizeOutlined,
+  PhoneOutlined,
 } from "@ant-design/icons";
 import { withFormik } from "formik";
 import * as Yup from "yup";
@@ -58,6 +59,19 @@ const Register = (props) => {
 
             {errors.name && touched.name && (
               <div className="text-danger">{errors.name}</div>
+            )}
+
+            <Input
+              size="large"
+              placeholder="Số điện thoại"
+              name="phone"
+              className="mt-3"
+              onChange={handleChange}
+              prefix={<PhoneOutlined />}
+            />
+
+            {errors.phone && touched.phone && (
+              <div className="text-danger">{errors.phone}</div>
             )}
             <Input
               size="large"
@@ -138,6 +152,12 @@ const RegisterWithFormik = withFormik({
       .required("Vui lòng nhập mật khẩu")
       .oneOf([Yup.ref("password"), null], "Mật khẩu không khớp"),
     name: Yup.string().required("Vui lòng nhập họ tên"),
+    phone: Yup.string()
+      .required("Vui lòng số điện thoại")
+      .matches(
+        "^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$",
+        "Số điện thoại không hợp lệ"
+      ),
   }), //validate from field
 
   handleSubmit: (values, { props, setSubmitting }) => {
@@ -147,6 +167,7 @@ const RegisterWithFormik = withFormik({
         name: values.name,
         email: values.email,
         password: values.password,
+        phone: values.phone,
         role: "Khach Hang",
       })
     );

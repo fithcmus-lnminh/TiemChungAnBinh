@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Checkout from "./pages/Checkout";
 import SignUpFreeDay from "./pages/SignUpFreeDay";
+import Profile from "./pages/Profile/index";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/signup-freeday" element={<SignUpFreeDay />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </>
   );

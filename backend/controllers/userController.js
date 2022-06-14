@@ -422,16 +422,21 @@ export async function getRegisterFormByUserId(req, res, next) {
 }
 
 export async function postBuyVaccine(req, res, next) {
-  const { tenvaccine, tenvaccinekhac, soluong, makh } = req.body;
+  const { tenvaccine, tenvaccinekhac, makh, tongtien } = req.body;
 
   try {
     const vaccineOrder = await pool.query(
-      "INSERT INTO donmuavaccine(tenvaccine, tenvaccinekhac, soluong, makh) VALUES ($1, $2, $3, $4) RETURNING *",
-      [tenvaccine, tenvaccinekhac, parseInt(soluong), parseInt(makh)]
+      "INSERT INTO donmuavaccine(goivaccine, tenvaccinekhac, makh) VALUES ($1, $2, $3) RETURNING *",
+      [tenvaccine, tenvaccinekhac, parseInt(makh)]
     );
 
     if (vaccineOrder.rowCount > 0) {
       res.status(201).json(vaccineOrder.rows[0]);
+
+      await pool.query(
+        "INSERT INTO hoadon(tongtien, madonmua) VALUES ($1, $2) returning *",
+        [tongtien, vaccineOrder.rows[0].madon]
+      );
     } else {
       res.status(400);
       throw new Error("Không thể mua vaccine.");

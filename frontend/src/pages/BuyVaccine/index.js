@@ -13,31 +13,39 @@ import {
 } from "./BuyVaccineElement";
 import * as Yup from "yup";
 import Select from "react-select";
+import { connect, useSelector } from "react-redux";
+import { muaVaccine } from "../../redux/apiRequests/muaVaccineRequest";
 
 const vaccinePackageData = [
   {
     value: "Gói cho trẻ 0-9 tháng tuổi",
     label: "Gói cho trẻ 0-9 tháng tuổi",
+    price: 1200000,
   },
   {
     value: "Gói cho trẻ 0-12 tháng tuổi",
     label: "Gói cho trẻ 0-12 tháng tuổi",
+    price: 1500000,
   },
   {
     value: "Gói cho trẻ 0-24 tháng tuổi",
     label: "Gói cho trẻ 0-24 tháng tuổi",
+    price: 2000000,
   },
   {
     value: "Gói cho người lớn trên 18 tuổi",
     label: "Gói cho người lớn trên 18 tuổi",
+    price: 2500000,
   },
   {
     value: "Gói cho phụ nữ mang thai",
     label: "Gói cho phụ nữ mang thai",
+    price: 4000000,
   },
   {
     value: "Gói cho người trên 65 tuổi",
     label: "Gói cho người trên 65 tuổi",
+    price: 3000000,
   },
 ];
 
@@ -60,7 +68,7 @@ const BuyVaccine = (props) => {
                   </FormLabel>
                   <Form.Control
                     type="text"
-                    value={values.customerId}
+                    value={"KH" + values.customerId}
                     onChange={handleChange}
                     disabled
                   ></Form.Control>
@@ -85,22 +93,7 @@ const BuyVaccine = (props) => {
                   )}
                 </FormGroup>
               </Col>
-              <Col md={3}>
-                <FormGroup controlId="phone">
-                  <FormLabel>
-                    Số điện thoại <TextRed>(*)</TextRed>
-                  </FormLabel>
-                  <Form.Control
-                    type="text"
-                    value={values.phone}
-                    onChange={handleChange}
-                    disabled
-                  ></Form.Control>
-                  {errors.phone && touched.phone && (
-                    <TextRed fontSmall>{errors.phone}</TextRed>
-                  )}
-                </FormGroup>
-              </Col>
+
               <Col md={4}>
                 <FormGroup controlId="email">
                   <FormLabel>
@@ -114,6 +107,22 @@ const BuyVaccine = (props) => {
                   ></Form.Control>
                   {errors.email && touched.email && (
                     <TextRed fontSmall>{errors.email}</TextRed>
+                  )}
+                </FormGroup>
+              </Col>
+              <Col md={3}>
+                <FormGroup controlId="phone">
+                  <FormLabel>
+                    Số điện thoại <TextRed>(*)</TextRed>
+                  </FormLabel>
+                  <Form.Control
+                    type="text"
+                    value={values.phone}
+                    onChange={handleChange}
+                    disabled
+                  ></Form.Control>
+                  {errors.phone && touched.phone && (
+                    <TextRed fontSmall>{errors.phone}</TextRed>
                   )}
                 </FormGroup>
               </Col>
@@ -165,28 +174,44 @@ const BuyVaccine = (props) => {
 };
 
 const BuyVaccineWithFormik = withFormik({
-  mapPropsToValues: () => ({
-    customerId: "KH001",
-    name: "Nguyễn Văn A",
-    phone: "0905901004",
-    email: "nguyenvana@example.com",
+  mapPropsToValues: (props) => ({
+    customerId: props.customerId,
+    name: props.name,
+    phone: props.phone ?? "",
+    email: props.email,
     vacPackage: [],
     vacPackageDiff: "",
   }),
 
-  validationSchema: Yup.object().shape({}),
+  validationSchema: Yup.object().shape({
+    vacPackage: Yup.array().min(1, "Vui lòng chọn gói tiêm"),
+  }),
 
   handleSubmit: (values, { props }) => {
-    console.log(
-      values.name,
-      values.dob,
-      values.gender,
-      values.phone,
-      values.customerId
+    let packages = [];
+    let totalPrice = 0;
+    values.vacPackage.map((p) => {
+      totalPrice += p.price;
+      return packages.push(p.value);
+    });
+    props.dispatch(
+      muaVaccine({
+        tenvaccine: packages,
+        tenvaccinekhac: values.vacPackageDiff,
+        makh: values.customerId,
+        tongtien: totalPrice,
+      })
     );
   },
 
   displayName: "SignUpVaccination",
 })(BuyVaccine);
 
-export default BuyVaccineWithFormik;
+const mapStateToProps = (state) => ({
+  customerId: state.user.userInfo?.MaTaiKhoan,
+  name: state.user.userInfo?.HoTen,
+  email: state.user.userInfo?.Email,
+  phone: state.user.userInfo?.DienThoai,
+});
+
+export default connect(mapStateToProps)(BuyVaccineWithFormik);

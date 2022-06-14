@@ -45,7 +45,8 @@ CREATE TABLE HoaDon (
     SoTienConLai FLOAT,
     SoLanThanhToan INTEGER,
     MaKH INTEGER,
-    MaNVLapHD INTEGER
+    MaDonMua INTEGER,
+    FOREIGN KEY (MaDonMua) REFERENCES DonMuaVaccine(MaDon),
 );
 
 CREATE TABLE LichLamViec (
@@ -57,9 +58,8 @@ CREATE TABLE LichLamViec (
 
 CREATE TABLE DonMuaVaccine (
     MaDon INTEGER PRIMARY KEY,
-    TenVaccine VARCHAR(50),
+    GoiVaccine VARCHAR(255)[],
     TenVaccineKhac VARCHAR(255),
-    SoLuong INTEGER,
     MaKH INTEGER,
     FOREIGN KEY (MaKH) REFERENCES TaiKhoan(MaTaiKhoan)
 );

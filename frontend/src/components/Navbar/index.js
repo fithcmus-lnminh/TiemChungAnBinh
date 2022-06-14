@@ -21,6 +21,8 @@ const Navbar = (props) => {
 
   const { userInfo } = useSelector((state) => state.user);
 
+  console.log(userInfo);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -41,7 +43,11 @@ const Navbar = (props) => {
             <NavLinks to="/signup-vaccination">Đăng ký tiêm</NavLinks>
           </NavItem>
           <NavItem>
-            <NavLinks to="/buy-vaccine">Mua vắc xin</NavLinks>
+            <NavLinks
+              to={userInfo ? "/buy-vaccine" : "/login?redirect=buy-vaccine"}
+            >
+              Mua vắc xin
+            </NavLinks>
           </NavItem>
           <NavItem>
             <NavLinks to="/checkout">Thanh toán</NavLinks>
