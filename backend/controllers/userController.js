@@ -20,6 +20,27 @@ export const getUserProfile = async (req, res, next) => {
   }
 };
 
+export const updateProfile = async (req, res, next) => {
+  const userId = req.params.id;
+  const { hoten, ngaysinh, dienthoai, gioitinh, diachi } = req.body;
+
+  try {
+    const user = await pool.query(
+      "UPDATE TaiKhoan SET hoten=$1, ngaysinh=$2, dienthoai=$3, gioitinh=$4, diachi=$5 WHERE mataikhoan=$6 RETURNING *",
+      [hoten, ngaysinh, dienthoai, gioitinh, diachi, parseInt(userId)]
+    );
+
+    if (user.rowCount > 0) {
+      res.status(200).json(user.rows[0]);
+    } else {
+      res.status(404);
+      throw new Error("Không thể cập nhật hồ sơ");
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
 export async function updateBill(req, res, next) {
   const billId = req.params.mahoadon;
   const { SoTienThanhToan } = req.body;
