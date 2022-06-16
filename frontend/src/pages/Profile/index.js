@@ -7,10 +7,14 @@ import {
   ButtonWrapper,
   ProfileContainer,
   ProfileH2,
+  TextRed,
 } from "./ProfileElement";
 import * as Yup from "yup";
 import { withFormik } from "formik";
-import { getProfile } from "../../redux/apiRequests/getProfileRequest";
+import {
+  getProfile,
+  updateProfile,
+} from "../../redux/apiRequests/profileRequest";
 
 const Profile = (props) => {
   const { values, touched, errors, handleChange, handleSubmit, setFieldValue } =
@@ -18,7 +22,11 @@ const Profile = (props) => {
 
   const [isEdit, setIsEdit] = useState(false);
 
-  const dispatch = useDispatch();
+  const { isSuccess, errorMessage } = useSelector((state) => state.userProfile);
+
+  useEffect(() => {
+    isSuccess && setIsEdit(false);
+  }, [isSuccess]);
 
   return (
     <>
@@ -30,7 +38,8 @@ const Profile = (props) => {
             Thay đổi thông tin
           </ButtonSubmit>
         </ButtonWrapper>
-        <Form>
+        {errorMessage && <TextRed>{errorMessage}</TextRed>}
+        <Form onSubmit={handleSubmit}>
           <Form.Group controlId="name" className="mt-3">
             <Form.Label>Họ và tên</Form.Label>
             <Form.Control
@@ -40,6 +49,9 @@ const Profile = (props) => {
               onChange={handleChange}
               disabled={!isEdit}
             ></Form.Control>
+            {errors.name && touched.name && (
+              <TextRed fontSmall>{errors.name}</TextRed>
+            )}
           </Form.Group>
           <Row>
             <Col md={8}>
@@ -47,10 +59,13 @@ const Profile = (props) => {
                 <Form.Label>Ngày sinh</Form.Label>
                 <Form.Control
                   type="date"
-                  value={values.dob}
+                  value={values.dob.split("T")[0]}
                   onChange={handleChange}
                   disabled={!isEdit}
                 ></Form.Control>
+                {errors.dob && touched.dob && (
+                  <TextRed fontSmall>{errors.dob}</TextRed>
+                )}
               </Form.Group>
             </Col>
             <Col>
@@ -68,6 +83,9 @@ const Profile = (props) => {
                   <option value="Nam">Nam</option>
                   <option value="Nữ">Nữ</option>
                 </Form.Control>
+                {errors.gender && touched.gender && (
+                  <TextRed fontSmall>{errors.gender}</TextRed>
+                )}
               </Form.Group>
             </Col>
           </Row>
@@ -83,6 +101,9 @@ const Profile = (props) => {
                   disabled={!isEdit}
                 ></Form.Control>
               </Form.Group>
+              {errors.phone && touched.phone && (
+                <TextRed fontSmall>{errors.phone}</TextRed>
+              )}
             </Col>
             <Col md={6}>
               <Form.Group controlId="role" className="mt-3">
@@ -105,6 +126,9 @@ const Profile = (props) => {
               onChange={handleChange}
               disabled={!isEdit}
             ></Form.Control>
+            {errors.address && touched.address && (
+              <TextRed fontSmall>{errors.address}</TextRed>
+            )}
           </Form.Group>
 
           {isEdit && (
@@ -112,7 +136,9 @@ const Profile = (props) => {
               <ButtonSubmit secondary onClick={() => setIsEdit(false)}>
                 Hủy bỏ
               </ButtonSubmit>
-              <ButtonSubmit className="ms-3">Cập nhật</ButtonSubmit>
+              <ButtonSubmit type="submit" className="ms-3">
+                Cập nhật
+              </ButtonSubmit>
             </ButtonWrapper>
           )}
         </Form>
@@ -133,9 +159,23 @@ const ProfileWithFormik = withFormik({
 
   validationSchema: Yup.object().shape({
     name: Yup.string().required("Vui lòng nhập tên người tiêm"),
+    dob: Yup.string().required("Vui lòng nhập ngày sinh"),
+    gender: Yup.string().required("Vui lòng chọn giới tính"),
+    phone: Yup.string().required("Vui lòng nhập số điện thoại"),
+    address: Yup.string().required("Vui lòng nhập địa chỉ"),
   }),
 
-  handleSubmit: (values, { props }) => {},
+  handleSubmit: (values, { props }) => {
+    props.dispatch(
+      updateProfile({
+        hoten: values.name,
+        ngaysinh: values.dob,
+        gioitinh: values.gender,
+        dienthoai: values.phone,
+        diachi: values.address,
+      })
+    );
+  },
 
   displayName: "Profile",
 })(Profile);

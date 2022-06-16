@@ -20,6 +20,7 @@ import {
   postRegisterWork,
   getRegisterWorkByUserId,
   getUserProfile,
+  updateProfile,
 } from "../controllers/userController.js";
 import { isStaff } from "../middlewares/isStaff.js";
 import { isAuth } from "../middlewares/authMiddleware.js";
@@ -57,5 +58,6 @@ router.get(
   isEmployee,
   getRegisterWorkByUserId
 );
+router.put("/updateProfile/:id", isAuth, updateProfile);
 
 export default router;

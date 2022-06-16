@@ -1,8 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const getProfileSlice = createSlice({
-  name: "getProfile",
+const profileSlice = createSlice({
+  name: "Profile",
   initialState: {
+    userProfile:
+      sessionStorage.getItem("userProfile") &&
+      JSON.parse(sessionStorage.getItem("userProfile")),
     isLoading: false,
     isSuccess: false,
     errorMessage: "",
@@ -10,6 +13,7 @@ const getProfileSlice = createSlice({
   reducers: {
     getProfileRequest(state) {
       state.isLoading = true;
+      state.isSuccess = false;
     },
     getProfileSuccess(state, action) {
       state.isLoading = false;
@@ -18,11 +22,12 @@ const getProfileSlice = createSlice({
     },
     getProfileFail(state, action) {
       state.isLoading = false;
+      state.isSuccess = false;
       state.errorMessage = action.payload;
     },
   },
 });
 
 export const { getProfileRequest, getProfileSuccess, getProfileFail } =
-  getProfileSlice.actions;
-export default getProfileSlice.reducer;
+  profileSlice.actions;
+export default profileSlice.reducer;

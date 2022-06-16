@@ -6,7 +6,7 @@ import {
 } from "../slices/userSlice";
 import axios from "axios";
 import { openNotification } from "../../utils/notification";
-import { getProfile } from "./getProfileRequest";
+import { getProfile } from "./profileRequest";
 
 export const login = (obj) => async (dispatch) => {
   dispatch(loginRequest());
@@ -15,6 +15,7 @@ export const login = (obj) => async (dispatch) => {
     dispatch(loginSuccess(res.data));
 
     dispatch(getProfile());
+
     sessionStorage.setItem("userInfo", JSON.stringify(res.data));
   } catch (err) {
     dispatch(

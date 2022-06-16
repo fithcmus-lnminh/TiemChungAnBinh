@@ -33,7 +33,7 @@ export const updateProfile = async (req, res, next) => {
     if (user.rowCount > 0) {
       res.status(200).json(user.rows[0]);
     } else {
-      res.status(404);
+      res.status(401);
       throw new Error("Không thể cập nhật hồ sơ");
     }
   } catch (err) {
