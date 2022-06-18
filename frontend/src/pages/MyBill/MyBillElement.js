@@ -1,8 +1,8 @@
 import { Button } from "react-bootstrap";
 import styled from "styled-components";
 
-export const ProfileContainer = styled.div`
-  margin: 3rem 20rem;
+export const MyBillContainer = styled.div`
+  margin: 3rem 15rem;
   max-width: 30rem;
   margin: 3rem auto;
 
@@ -18,12 +18,12 @@ export const ProfileContainer = styled.div`
   }
 `;
 
-export const ProfileH2 = styled.h2`
+export const MyBillH2 = styled.h2`
   text-align: center;
   margin: 0;
 `;
 
-export const ProfileP = styled.p``;
+export const MyBillP = styled.p``;
 
 export const TextRed = styled.span`
   color: red;

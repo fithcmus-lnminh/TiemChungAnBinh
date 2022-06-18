@@ -104,20 +104,13 @@ export async function getBillByUserID(req, res, next) {
   const userId = req.params.userid;
 
   try {
-    const bill = await pool.query("SELECT * FROM HoaDon WHERE MaKH = $1", [
-      userId,
-    ]);
+    const bill = await pool.query(
+      "SELECT h.Mahd, d.goivaccine, d.tenvaccinekhac ,h.tongtien FROM HoaDon h, donmuavaccine d WHERE h.MaKH = $1 and h.madonmua = d.madon",
+      [userId]
+    );
 
     if (bill.rowCount > 0) {
-      res.json({
-        MaHoaDon: bill.rows[0].mahd,
-        HinhThucThanhToan: bill.rows[0].hinhthucthanhtoan,
-        TongTien: bill.rows[0].tongtien,
-        SoTienConLai: bill.rows[0].sotienconlai,
-        SoLanThanhToan: bill.rows[0].solanthanhtoan,
-        MaKhachHang: bill.rows[0].makh,
-        MaNhanVienLap: bill.rows[0].manvlaphd,
-      });
+      res.json(bill.rows);
     } else {
       res.status(401);
       throw new Error("Invalid Bill");
@@ -475,8 +468,8 @@ export async function postBuyVaccine(req, res, next) {
       res.status(201).json(vaccineOrder.rows[0]);
 
       await pool.query(
-        "INSERT INTO hoadon(tongtien, madonmua) VALUES ($1, $2) returning *",
-        [tongtien, vaccineOrder.rows[0].madon]
+        "INSERT INTO hoadon(tongtien, madonmua, makh) VALUES ($1, $2, $3) returning *",
+        [tongtien, vaccineOrder.rows[0].madon, parseInt(makh)]
       );
     } else {
       res.status(400);

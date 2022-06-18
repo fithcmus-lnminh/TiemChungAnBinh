@@ -9,6 +9,7 @@ import Register from "./pages/Register";
 import Checkout from "./pages/Checkout";
 import SignUpFreeDay from "./pages/SignUpFreeDay";
 import Profile from "./pages/Profile/index";
+import MyBill from "./pages/MyBill";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/my-bill" element={<MyBill />} />
       </Routes>
     </>
   );
