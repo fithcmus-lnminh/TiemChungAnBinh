@@ -32,116 +32,123 @@ const Profile = (props) => {
     <>
       <Header />
       <ProfileContainer>
-        <ProfileH2>THÔNG TIN CÁ NHÂN</ProfileH2>
-        <ButtonWrapper onClick={() => setIsEdit(true)}>
-          <ButtonSubmit small disabled={isEdit}>
-            Thay đổi thông tin
-          </ButtonSubmit>
-        </ButtonWrapper>
-        {errorMessage && <TextRed>{errorMessage}</TextRed>}
-        <Form onSubmit={handleSubmit}>
-          <Form.Group controlId="name" className="mt-3">
-            <Form.Label>Họ và tên</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Nhập họ tên"
-              value={values.name}
-              onChange={handleChange}
-              disabled={!isEdit}
-            ></Form.Control>
-            {errors.name && touched.name && (
-              <TextRed fontSmall>{errors.name}</TextRed>
-            )}
-          </Form.Group>
-          <Row>
-            <Col md={8}>
-              <Form.Group controlId="dob" className="mt-3">
-                <Form.Label>Ngày sinh</Form.Label>
-                <Form.Control
-                  type="date"
-                  value={values.dob.split("T")[0]}
-                  onChange={handleChange}
-                  disabled={!isEdit}
-                ></Form.Control>
-                {errors.dob && touched.dob && (
-                  <TextRed fontSmall>{errors.dob}</TextRed>
-                )}
-              </Form.Group>
-            </Col>
-            <Col>
-              <Form.Group controlId="gender" className="mt-3">
-                <Form.Label>Giới tính</Form.Label>
-                <Form.Control
-                  as="select"
-                  value={values.gender}
-                  onChange={handleChange}
-                  disabled={!isEdit}
-                >
-                  <option value="" disabled selected>
-                    Chọn giới tính ...
-                  </option>
-                  <option value="Nam">Nam</option>
-                  <option value="Nữ">Nữ</option>
-                </Form.Control>
-                {errors.gender && touched.gender && (
-                  <TextRed fontSmall>{errors.gender}</TextRed>
-                )}
-              </Form.Group>
-            </Col>
-          </Row>
-          <Row>
-            <Col md={6}>
-              <Form.Group controlId="phone" className="mt-3">
-                <Form.Label>Số điện thoại</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Nhập số điện thoại"
-                  value={values.phone}
-                  onChange={handleChange}
-                  disabled={!isEdit}
-                ></Form.Control>
-              </Form.Group>
-              {errors.phone && touched.phone && (
-                <TextRed fontSmall>{errors.phone}</TextRed>
-              )}
-            </Col>
-            <Col md={6}>
-              <Form.Group controlId="role" className="mt-3">
-                <Form.Label>Vai trò</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={values.role}
-                  disabled
-                ></Form.Control>
-              </Form.Group>
-            </Col>
-          </Row>
-
-          <Form.Group controlId="address" className="mt-3">
-            <Form.Label>Địa chỉ</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Nhập địa chỉ"
-              value={values.address}
-              onChange={handleChange}
-              disabled={!isEdit}
-            ></Form.Control>
-            {errors.address && touched.address && (
-              <TextRed fontSmall>{errors.address}</TextRed>
-            )}
-          </Form.Group>
-
-          {isEdit && (
-            <ButtonWrapper className="mt-3">
-              <ButtonSubmit secondary onClick={() => setIsEdit(false)}>
-                Hủy bỏ
-              </ButtonSubmit>
-              <ButtonSubmit type="submit" className="ms-3">
-                Cập nhật
+        <Row>
+          <Col md={5}>
+            <ProfileH2>THÔNG TIN CÁ NHÂN</ProfileH2>
+            <ButtonWrapper onClick={() => setIsEdit(true)}>
+              <ButtonSubmit small disabled={isEdit}>
+                Thay đổi thông tin
               </ButtonSubmit>
             </ButtonWrapper>
-          )}
-        </Form>
+            {errorMessage && <TextRed>{errorMessage}</TextRed>}
+            <Form onSubmit={handleSubmit}>
+              <Form.Group controlId="name" className="mt-3">
+                <Form.Label>Họ và tên</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Nhập họ tên"
+                  value={values.name}
+                  onChange={handleChange}
+                  disabled={!isEdit}
+                ></Form.Control>
+                {errors.name && touched.name && (
+                  <TextRed fontSmall>{errors.name}</TextRed>
+                )}
+              </Form.Group>
+              <Row>
+                <Col md={8}>
+                  <Form.Group controlId="dob" className="mt-3">
+                    <Form.Label>Ngày sinh</Form.Label>
+                    <Form.Control
+                      type="date"
+                      value={values.dob.split("T")[0]}
+                      onChange={handleChange}
+                      disabled={!isEdit}
+                    ></Form.Control>
+                    {errors.dob && touched.dob && (
+                      <TextRed fontSmall>{errors.dob}</TextRed>
+                    )}
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group controlId="gender" className="mt-3">
+                    <Form.Label>Giới tính</Form.Label>
+                    <Form.Control
+                      as="select"
+                      value={values.gender}
+                      onChange={handleChange}
+                      disabled={!isEdit}
+                    >
+                      <option value="" disabled selected>
+                        Chọn giới tính ...
+                      </option>
+                      <option value="Nam">Nam</option>
+                      <option value="Nữ">Nữ</option>
+                    </Form.Control>
+                    {errors.gender && touched.gender && (
+                      <TextRed fontSmall>{errors.gender}</TextRed>
+                    )}
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col md={6}>
+                  <Form.Group controlId="phone" className="mt-3">
+                    <Form.Label>Số điện thoại</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Nhập số điện thoại"
+                      value={values.phone}
+                      onChange={handleChange}
+                      disabled={!isEdit}
+                    ></Form.Control>
+                  </Form.Group>
+                  {errors.phone && touched.phone && (
+                    <TextRed fontSmall>{errors.phone}</TextRed>
+                  )}
+                </Col>
+                <Col md={6}>
+                  <Form.Group controlId="role" className="mt-3">
+                    <Form.Label>Vai trò</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={values.role}
+                      disabled
+                    ></Form.Control>
+                  </Form.Group>
+                </Col>
+              </Row>
+
+              <Form.Group controlId="address" className="mt-3">
+                <Form.Label>Địa chỉ</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Nhập địa chỉ"
+                  value={values.address}
+                  onChange={handleChange}
+                  disabled={!isEdit}
+                ></Form.Control>
+                {errors.address && touched.address && (
+                  <TextRed fontSmall>{errors.address}</TextRed>
+                )}
+              </Form.Group>
+
+              {isEdit && (
+                <ButtonWrapper className="mt-3">
+                  <ButtonSubmit secondary onClick={() => setIsEdit(false)}>
+                    Hủy bỏ
+                  </ButtonSubmit>
+                  <ButtonSubmit type="submit" className="ms-3">
+                    Cập nhật
+                  </ButtonSubmit>
+                </ButtonWrapper>
+              )}
+            </Form>
+          </Col>
+          <Col md={7}>
+            <ProfileH2>THÔNG TIN ĐĂNG KÝ TIÊM</ProfileH2>
+          </Col>
+        </Row>
       </ProfileContainer>
     </>
   );

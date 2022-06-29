@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 export const MyBillContainer = styled.div`
   margin: 3rem 15rem;
-  max-width: 30rem;
+  max-width: 60rem;
   margin: 3rem auto;
 
   @media screen and (max-width: 1320px) {
@@ -21,6 +21,7 @@ export const MyBillContainer = styled.div`
 export const MyBillH2 = styled.h2`
   text-align: center;
   margin: 0;
+  margin-bottom: 2rem;
 `;
 
 export const MyBillP = styled.p``;

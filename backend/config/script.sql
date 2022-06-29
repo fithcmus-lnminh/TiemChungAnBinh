@@ -51,9 +51,9 @@ CREATE TABLE HoaDon (
 
 CREATE TABLE LichLamViec (
     MaLLV INTEGER PRIMARY KEY,
-    NgayLamViec DATE,
-    CaLamViec VARCHAR(5),
-    MaNV INTEGER
+    ThongTinLamViec VARCHAR(255)[],
+    MaNV INTEGER,
+    FOREIGN KEY (MaNV) REFERENCES TaiKhoan(MaTaiKhoan)
 );
 
 CREATE TABLE DonMuaVaccine (

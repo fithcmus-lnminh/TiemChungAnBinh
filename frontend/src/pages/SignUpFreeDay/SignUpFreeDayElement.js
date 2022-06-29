@@ -2,18 +2,7 @@ import { Button } from "react-bootstrap";
 import styled from "styled-components";
 
 export const FreeDayContainer = styled.div`
-  margin: 3rem 20rem;
-
-  @media screen and (max-width: 1320px) {
-    margin: 3rem 10rem;
-  }
-
-  @media screen and (max-width: 1195px) {
-    margin: 3rem 5rem;
-  }
-  @media screen and (max-width: 850px) {
-    margin: 3rem 3rem;
-  }
+  margin: 3rem 0;
 `;
 
 export const FreeDayH2 = styled.h2`

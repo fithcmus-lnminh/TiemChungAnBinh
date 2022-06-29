@@ -2,8 +2,8 @@ import { Button } from "react-bootstrap";
 import styled from "styled-components";
 
 export const ProfileContainer = styled.div`
-  margin: 3rem 20rem;
-  max-width: 30rem;
+  margin: 3rem 10rem;
+  padding: 0 15rem;
   margin: 3rem auto;
 
   @media screen and (max-width: 1320px) {

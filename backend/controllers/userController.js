@@ -105,7 +105,7 @@ export async function getBillByUserID(req, res, next) {
 
   try {
     const bill = await pool.query(
-      "SELECT h.Mahd, d.goivaccine, d.tenvaccinekhac ,h.tongtien FROM HoaDon h, donmuavaccine d WHERE h.MaKH = $1 and h.madonmua = d.madon",
+      "SELECT h.Mahd, d.goivaccine, d.tenvaccinekhac ,h.tongtien, h.hinhthucthanhtoan, h.sotienconlai, h.solanthanhtoan FROM HoaDon h, donmuavaccine d WHERE h.MaKH = $1 and h.madonmua = d.madon",
       [userId]
     );
 
@@ -481,19 +481,19 @@ export async function postBuyVaccine(req, res, next) {
 }
 
 export async function postRegisterWork(req, res, next) {
-  const { ngaylamviec, calamviec, manv } = req.body;
+  const { thongtinlamviec, manv } = req.body;
 
   try {
     const registerWork = await pool.query(
-      "INSERT INTO lichlamviec(ngaylamviec, calamviec, manv) VALUES ($1, $2, $3) RETURNING *",
-      [ngaylamviec, calamviec, parseInt(manv)]
+      "INSERT INTO lichlamviec(thongtinlamviec, manv) VALUES ($1, $2) RETURNING *",
+      [thongtinlamviec, parseInt(manv)]
     );
 
     if (registerWork.rowCount > 0) {
       res.status(201).json(registerWork.rows[0]);
     } else {
       res.status(400);
-      throw new Error("Không thể đăng ký ca làm việc.");
+      throw new Error("Không thể đăng ký lịch làm việc.");
     }
   } catch (err) {
     next(err);
