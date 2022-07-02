@@ -8,6 +8,7 @@ import {
   CautionWrapper,
   CheckoutContainer,
   CheckoutH2,
+  CheckoutP,
   PaymentWrapper,
   TextRed,
 } from "./CheckoutElement";
@@ -60,14 +61,20 @@ const Checkout = (props) => {
   const thanhtoanHandler = () => {
     dispatch(
       thanhtoan(billId, {
-        SoTienThanhToan: paymentPrice,
+        SoTienThanhToan: !billDetail?.hinhthucthanhtoan
+          ? Math.round(paymentPrice)
+          : Math.round(billDetail?.sotienconlai / billDetail?.solanthanhtoan),
         HinhThucThanhToan: values.paymentMethod,
         SoLanThanhToan:
           values.paymentMethod === "Thanh toán toàn bộ"
             ? 0
-            : values.paymentMethod === "Thanh toán theo đợt"
+            : values.paymentMethod === "Thanh toán theo đợt" &&
+              !billDetail?.hinhthucthanhtoan
             ? values.numOfPayment
-            : values.numOfMonth,
+            : values.paymentMethod === "Thanh toán trả góp" &&
+              !billDetail?.hinhthucthanhtoan
+            ? values.numOfMonth
+            : billDetail?.solanthanhtoan,
       })
     );
   };
@@ -152,108 +159,128 @@ const Checkout = (props) => {
               </Col>
             </Row>
 
-            {values.paymentMethod === "Thanh toán theo đợt" && (
-              <Row className="d-flex justify-content-center">
-                <Col md={3}>
-                  <FormGroup controlId="numOfPayment">
-                    <FormLabel>
-                      Số đợt <TextRed>(*)</TextRed>
-                    </FormLabel>
-                    <Form.Control
-                      as="select"
-                      value={values.numOfPayment}
-                      onChange={handleChange}
-                    >
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                    </Form.Control>
-                    {errors.numOfPayment && touched.numOfPayment && (
-                      <TextRed fontSmall>{errors.numOfPayment}</TextRed>
-                    )}
-                  </FormGroup>
-                </Col>
-                <Col md={3}>
-                  <FormGroup controlId="pricePerPay">
-                    <FormLabel>
-                      Số tiền mỗi đợt ({parseInt(100 / values.numOfPayment)}%){" "}
-                    </FormLabel>
-                    <Form.Control
-                      type="text"
-                      value={values.totalPrice / values.numOfPayment}
-                      onChange={handleChange}
-                      disabled
-                    ></Form.Control>
-                    {errors.pricePerPay && touched.pricePerPay && (
-                      <TextRed fontSmall>{errors.pricePerPay}</TextRed>
-                    )}
-                  </FormGroup>
-                </Col>
-              </Row>
+            {values.paymentMethod === "Thanh toán theo đợt" &&
+              !billDetail?.hinhthucthanhtoan && (
+                <Row className="d-flex justify-content-center">
+                  <Col md={3}>
+                    <FormGroup controlId="numOfPayment">
+                      <FormLabel>
+                        Số đợt <TextRed>(*)</TextRed>
+                      </FormLabel>
+                      <Form.Control
+                        as="select"
+                        value={values.numOfPayment}
+                        onChange={handleChange}
+                      >
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                      </Form.Control>
+                      {errors.numOfPayment && touched.numOfPayment && (
+                        <TextRed fontSmall>{errors.numOfPayment}</TextRed>
+                      )}
+                    </FormGroup>
+                  </Col>
+                  <Col md={3}>
+                    <FormGroup controlId="pricePerPay">
+                      <FormLabel>
+                        Số tiền mỗi đợt ({parseInt(100 / values.numOfPayment)}%){" "}
+                      </FormLabel>
+                      <Form.Control
+                        type="text"
+                        value={values.totalPrice / values.numOfPayment}
+                        onChange={handleChange}
+                        disabled
+                      ></Form.Control>
+                      {errors.pricePerPay && touched.pricePerPay && (
+                        <TextRed fontSmall>{errors.pricePerPay}</TextRed>
+                      )}
+                    </FormGroup>
+                  </Col>
+                </Row>
+              )}
+
+            {values.paymentMethod === "Thanh toán trả góp" &&
+              !billDetail?.hinhthucthanhtoan && (
+                <Row className="d-flex justify-content-center">
+                  <Col md={3}>
+                    <FormGroup controlId="numOfMonth">
+                      <FormLabel>
+                        Số tháng <TextRed>(*)</TextRed>
+                      </FormLabel>
+                      <Form.Control
+                        as="select"
+                        value={values.numOfMonth}
+                        onChange={handleChange}
+                      >
+                        <option value="3">3</option>
+                        <option value="6">6</option>
+                        <option value="9">9</option>
+                        <option value="12">12</option>
+                      </Form.Control>
+                      {errors.numOfMonth && touched.numOfMonth && (
+                        <TextRed fontSmall>{errors.numOfMonth}</TextRed>
+                      )}
+                    </FormGroup>
+                  </Col>
+
+                  <Col md={3}>
+                    <FormGroup controlId="pricePerMonth">
+                      <FormLabel>Số tiền mỗi tháng</FormLabel>
+                      <Form.Control
+                        type="text"
+                        value={Math.round(
+                          values.totalPrice / values.numOfMonth
+                        )}
+                        onChange={handleChange}
+                        disabled
+                      ></Form.Control>
+                      {errors.pricePerMonth && touched.pricePerMonth && (
+                        <TextRed fontSmall>{errors.pricePerMonth}</TextRed>
+                      )}
+                    </FormGroup>
+                  </Col>
+
+                  <Col md={3}>
+                    <FormGroup controlId="interestPrice">
+                      <FormLabel>Lãi suất ({interestRate}%)</FormLabel>
+                      <Form.Control
+                        type="text"
+                        value={(values.totalPrice * interestRate) / 100}
+                        onChange={handleChange}
+                        disabled
+                      ></Form.Control>
+                    </FormGroup>
+                  </Col>
+                </Row>
+              )}
+
+            {billDetail?.hinhthucthanhtoan && (
+              <>
+                <CheckoutP className="mt-3">
+                  Số lần thanh toán còn lại: {billDetail?.solanthanhtoan}
+                </CheckoutP>
+              </>
             )}
-
-            {values.paymentMethod === "Thanh toán trả góp" && (
-              <Row className="d-flex justify-content-center">
-                <Col md={3}>
-                  <FormGroup controlId="numOfMonth">
-                    <FormLabel>
-                      Số tháng <TextRed>(*)</TextRed>
-                    </FormLabel>
-                    <Form.Control
-                      as="select"
-                      value={values.numOfMonth}
-                      onChange={handleChange}
-                    >
-                      <option value="3">3</option>
-                      <option value="6">6</option>
-                      <option value="9">9</option>
-                      <option value="12">12</option>
-                    </Form.Control>
-                    {errors.numOfMonth && touched.numOfMonth && (
-                      <TextRed fontSmall>{errors.numOfMonth}</TextRed>
-                    )}
-                  </FormGroup>
-                </Col>
-
-                <Col md={3}>
-                  <FormGroup controlId="pricePerMonth">
-                    <FormLabel>Số tiền mỗi tháng</FormLabel>
-                    <Form.Control
-                      type="text"
-                      value={Math.round(values.totalPrice / values.numOfMonth)}
-                      onChange={handleChange}
-                      disabled
-                    ></Form.Control>
-                    {errors.pricePerMonth && touched.pricePerMonth && (
-                      <TextRed fontSmall>{errors.pricePerMonth}</TextRed>
-                    )}
-                  </FormGroup>
-                </Col>
-
-                <Col md={3}>
-                  <FormGroup controlId="interestPrice">
-                    <FormLabel>Lãi suất ({interestRate}%)</FormLabel>
-                    <Form.Control
-                      type="text"
-                      value={(values.totalPrice * interestRate) / 100}
-                      onChange={handleChange}
-                      disabled
-                    ></Form.Control>
-                  </FormGroup>
-                </Col>
-              </Row>
-            )}
-
             <PaymentWrapper>
-              <div>
+              <div className="mb-3">
                 Số tiền cần thanh toán:{" "}
-                <strong className="ms-3">{Math.round(paymentPrice)}đ</strong>
+                <strong className="ms-3">
+                  {!billDetail?.hinhthucthanhtoan
+                    ? Math.round(paymentPrice)
+                    : Math.round(
+                        billDetail?.sotienconlai / billDetail?.solanthanhtoan
+                      )}
+                  đ
+                </strong>
               </div>
             </PaymentWrapper>
 
-            <CautionWrapper>
-              <TextRed italic>(*) Các trường bắt buộc nhập</TextRed>
-            </CautionWrapper>
+            {!billDetail?.hinhthucthanhtoan && (
+              <CautionWrapper>
+                <TextRed italic>(*) Các trường bắt buộc nhập</TextRed>
+              </CautionWrapper>
+            )}
 
             <ButtonWrapper>
               <ButtonSubmit type="submit" onClick={thanhtoanHandler}>

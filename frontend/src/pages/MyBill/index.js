@@ -17,8 +17,8 @@ const MyBill = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    !billInfo && userInfo && dispatch(getBillByUserId(userInfo?.MaTaiKhoan));
-  }, [billInfo, userInfo, dispatch]);
+    userInfo && dispatch(getBillByUserId(userInfo?.MaTaiKhoan));
+  }, [userInfo, dispatch]);
   const navigate = useNavigate();
   const dataSource = billInfo ?? [];
   const columns = [
@@ -58,9 +58,9 @@ const MyBill = () => {
       width: "20%",
       render: (text, record, index) => {
         if (!record.hinhthucthanhtoan) return "Chưa thanh toán";
-        if (record.hinhthucthanhtoan && record.solanthanhtoan === 0)
+        if (record.hinhthucthanhtoan && record.solanthanhtoan <= 0)
           return "Đã thanh toán";
-        if (record.hinhthucthanhtoan && record.solanthanhtoan !== 0)
+        if (record.hinhthucthanhtoan && record.solanthanhtoan > 0)
           return (
             record.hinhthucthanhtoan +
             " - Còn " +
@@ -77,7 +77,7 @@ const MyBill = () => {
       render: (text, record, index) => {
         if (
           !record.hinhthucthanhtoan ||
-          (record.hinhthucthanhtoan && record.solanthanhtoan !== 0)
+          (record.hinhthucthanhtoan && record.solanthanhtoan > 0)
         )
           return (
             <ButtonWrapper>

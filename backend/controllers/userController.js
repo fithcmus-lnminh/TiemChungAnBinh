@@ -52,13 +52,19 @@ export async function updateBill(req, res, next) {
 
     if (bill.rowCount > 0) {
       bill.rows[0].sotienconlai -= SoTienThanhToan;
+      console.log(bill.rows[0].sotienconlai);
       if (bill.rows[0].sotienconlai < 100) {
         bill.rows[0].sotienconlai = 0;
       }
 
       const updatedBill = await pool.query(
-        "UPDATE HoaDon SET HinhThucThanhToan = $1, SoLanThanhToan = $2, SoTienConLai = $3 RETURNING *",
-        [HinhThucThanhToan, SoLanThanhToan, bill.rows[0].sotienconlai]
+        "UPDATE HoaDon SET HinhThucThanhToan = $1, SoLanThanhToan = $2, SoTienConLai = $3 WHERE MaHD = $4 RETURNING *",
+        [
+          HinhThucThanhToan,
+          SoLanThanhToan - 1,
+          bill.rows[0].sotienconlai,
+          billId,
+        ]
       );
       res.json(updatedBill);
     } else {
@@ -483,8 +489,8 @@ export async function postBuyVaccine(req, res, next) {
       res.status(201).json(vaccineOrder.rows[0]);
 
       await pool.query(
-        "INSERT INTO hoadon(tongtien, madonmua, makh) VALUES ($1, $2, $3) returning *",
-        [tongtien, vaccineOrder.rows[0].madon, parseInt(makh)]
+        "INSERT INTO hoadon(tongtien, sotienconlai, madonmua, makh) VALUES ($1, $2, $3, $4) returning *",
+        [tongtien, tongtien, vaccineOrder.rows[0].madon, parseInt(makh)]
       );
     } else {
       res.status(400);

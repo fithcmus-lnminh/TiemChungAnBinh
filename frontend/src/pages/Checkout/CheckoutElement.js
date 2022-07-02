@@ -21,6 +21,12 @@ export const CheckoutH2 = styled.h2`
   margin-bottom: 2rem;
 `;
 
+export const CheckoutP = styled.p`
+  text-align: center;
+  font-size: 1.1rem;
+  margin: 0;
+`;
+
 export const TextRed = styled.span`
   color: red;
   font-size: ${({ fontSmall }) => (fontSmall ? "14px" : "16px")};
