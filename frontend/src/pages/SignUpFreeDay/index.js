@@ -16,7 +16,6 @@ const SignUpFreeDay = () => {
   const dispatch = useDispatch();
 
   const { userInfo } = useSelector((state) => state.user);
-  console.log("user", userInfo);
 
   const clickHandler = () => {
     dispatch(

@@ -19,7 +19,7 @@ function App() {
         <Route path="/signup-vaccination" element={<SignUpVaccination />} />
         <Route path="/buy-vaccine" element={<BuyVaccine />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/checkout/:billId" element={<Checkout />} />
         <Route path="/signup-freeday" element={<SignUpFreeDay />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

@@ -2,9 +2,7 @@ import { Button } from "react-bootstrap";
 import styled from "styled-components";
 
 export const MyBillContainer = styled.div`
-  margin: 3rem 15rem;
-  max-width: 60rem;
-  margin: 3rem auto;
+  margin: 3rem 5rem;
 
   @media screen and (max-width: 1320px) {
     margin: 3rem 10rem;
@@ -47,7 +45,6 @@ export const ButtonSubmit = styled(Button)`
   align-items: center;
   transition: all 0.2s ease-in-out;
   text-decoration: none;
-  margin: 1rem 0;
 
   &:hover {
     transition: all 0.2s ease-in-out;

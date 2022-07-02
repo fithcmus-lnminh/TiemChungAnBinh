@@ -61,5 +61,8 @@ export const ButtonWrapper = styled.div`
 `;
 
 export const PaymentWrapper = styled.div`
+  display: flex;
+  justify-content: center;
   margin-top: 2rem;
+  font-size: 1.5rem;
 `;

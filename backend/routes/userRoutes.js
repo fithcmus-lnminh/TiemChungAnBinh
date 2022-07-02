@@ -21,6 +21,7 @@ import {
   getRegisterWorkByUserId,
   getUserProfile,
   updateProfile,
+  getBillById,
 } from "../controllers/userController.js";
 import { isStaff } from "../middlewares/isStaff.js";
 import { isAuth } from "../middlewares/authMiddleware.js";
@@ -33,6 +34,7 @@ router.get("/thong-tin-tai-khoan/:id", isAuth, getUserProfile);
 router.put("/thanh-toan/:mahoadon", updateBill);
 router.get("/lay-thong-tin-mua-vaccine/:userid", getInformationBuyVaccine);
 router.get("/lay-thong-tin-hoa-don/:userid", getBillByUserID);
+router.get("/lay-hoa-don/:id", getBillById);
 router.post("/them-goi-tiem", isStaff, addVaccinePackage);
 router.post("/them-loai-vaccine", isStaff, addVaccineType);
 router.post("/sua-goi-tiem", isStaff, updateVaccinePackage);

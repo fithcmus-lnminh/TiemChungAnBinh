@@ -49,11 +49,15 @@ const Navbar = (props) => {
               Mua vắc xin
             </NavLinks>
           </NavItem>
+
           <NavItem>
-            <NavLinks to="/checkout">Thanh toán</NavLinks>
-          </NavItem>
-          <NavItem>
-            <NavLinks to="/signup-freeday">Đăng ký lịch rảnh</NavLinks>
+            <NavLinks
+              to={
+                userInfo ? "/signup-freeday" : "/login?redirect=signup-freeday"
+              }
+            >
+              Đăng ký lịch rảnh
+            </NavLinks>
           </NavItem>
           <NavItem>
             <NavLinks to="/contact">Liên hệ</NavLinks>

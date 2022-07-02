@@ -1,24 +1,32 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Table } from "antd";
 import Header from "../../components/Header";
-import { MyBillContainer, MyBillH2 } from "./MyBillElement";
+import {
+  ButtonSubmit,
+  ButtonWrapper,
+  MyBillContainer,
+  MyBillH2,
+} from "./MyBillElement";
+import { useDispatch, useSelector } from "react-redux";
+import { getBillByUserId } from "../../redux/apiRequests/hoadonRequest";
+import { useNavigate } from "react-router-dom";
 
 const MyBill = () => {
-  const dataSource = [
-    {
-      mahoadon: 1,
-      goivaccine: ["Gói 18 tuổi", "Gói trẻ em", "Gói bình thường"],
-      tenvaccinekhac: "",
-      tongtien: 2300000,
-      tinhtrang: "Chưa thanh toán",
-    },
-  ];
+  const { billInfo } = useSelector((state) => state.hoadon);
+  const { userInfo } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    !billInfo && userInfo && dispatch(getBillByUserId(userInfo?.MaTaiKhoan));
+  }, [billInfo, userInfo, dispatch]);
+  const navigate = useNavigate();
+  const dataSource = billInfo ?? [];
   const columns = [
     {
       title: "Mã HĐ",
-      dataIndex: "mahoadon",
-      key: "mahoadon",
-      width: "12%",
+      dataIndex: "mahd",
+      key: "mahd",
+      width: "8%",
     },
     {
       title: "Tên gói vắc xin",
@@ -41,13 +49,50 @@ const MyBill = () => {
       title: "Tổng tiền",
       dataIndex: "tongtien",
       key: "tongtien",
-      width: "15%",
+      width: "10%",
     },
     {
       title: "Tình trạng",
       dataIndex: "tinhtrang",
       key: "tinhtrang",
       width: "20%",
+      render: (text, record, index) => {
+        if (!record.hinhthucthanhtoan) return "Chưa thanh toán";
+        if (record.hinhthucthanhtoan && record.solanthanhtoan === 0)
+          return "Đã thanh toán";
+        if (record.hinhthucthanhtoan && record.solanthanhtoan !== 0)
+          return (
+            record.hinhthucthanhtoan +
+            " - Còn " +
+            record.solanthanhtoan +
+            " lần thanh toán"
+          );
+      },
+    },
+    {
+      title: "",
+      dataIndex: "action",
+      key: "action",
+      width: "10%",
+      render: (text, record, index) => {
+        if (
+          !record.hinhthucthanhtoan ||
+          (record.hinhthucthanhtoan && record.solanthanhtoan !== 0)
+        )
+          return (
+            <ButtonWrapper>
+              <ButtonSubmit
+                small
+                type="submit"
+                onClick={() => {
+                  navigate(`/checkout/${record.mahd}`);
+                }}
+              >
+                Thanh toán
+              </ButtonSubmit>
+            </ButtonWrapper>
+          );
+      },
     },
   ];
 
@@ -57,8 +102,9 @@ const MyBill = () => {
       <MyBillContainer>
         <MyBillH2>HÓA ĐƠN CỦA TÔI</MyBillH2>
         <Table
-          pagination={{ pageSize: 3, showSizeChanger: false }}
+          pagination={{ pageSize: 10, showSizeChanger: false }}
           dataSource={dataSource}
+          rowKey="mahd"
           columns={columns}
         />
       </MyBillContainer>

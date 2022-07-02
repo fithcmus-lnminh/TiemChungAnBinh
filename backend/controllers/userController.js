@@ -43,7 +43,7 @@ export const updateProfile = async (req, res, next) => {
 
 export async function updateBill(req, res, next) {
   const billId = req.params.mahoadon;
-  const { SoTienThanhToan } = req.body;
+  const { SoTienThanhToan, HinhThucThanhToan, SoLanThanhToan } = req.body;
 
   try {
     const bill = await pool.query("SELECT * FROM HoaDon WHERE MaHD = $1", [
@@ -51,20 +51,16 @@ export async function updateBill(req, res, next) {
     ]);
 
     if (bill.rowCount > 0) {
-      bill.rows[0].solanthanhtoan++;
       bill.rows[0].sotienconlai -= SoTienThanhToan;
-      if (bill.rows[0].sotienconlai < 0) {
+      if (bill.rows[0].sotienconlai < 100) {
         bill.rows[0].sotienconlai = 0;
       }
-      res.json({
-        MaHoaDon: bill.rows[0].mahd,
-        HinhThucThanhToan: bill.rows[0].hinhthucthanhtoan,
-        TongTien: bill.rows[0].tongtien,
-        SoLanThanhToan: bill.rows[0].solanthanhtoan,
-        SoTienConLai: bill.rows[0].sotienconlai,
-        MaKhachHang: bill.rows[0].makh,
-        MaNhanVienLap: bill.rows[0].manvlaphd,
-      });
+
+      const updatedBill = await pool.query(
+        "UPDATE HoaDon SET HinhThucThanhToan = $1, SoLanThanhToan = $2, SoTienConLai = $3 RETURNING *",
+        [HinhThucThanhToan, SoLanThanhToan, bill.rows[0].sotienconlai]
+      );
+      res.json(updatedBill);
     } else {
       res.status(401);
       throw new Error("Invalid Bill");
@@ -73,6 +69,25 @@ export async function updateBill(req, res, next) {
     next(err);
   }
 }
+
+export const getBillById = async (req, res, next) => {
+  const billId = req.params.id;
+
+  try {
+    const bill = await pool.query("SELECT * FROM HoaDon WHERE MaHD = $1", [
+      billId,
+    ]);
+
+    if (bill.rowCount > 0) {
+      res.status(200).json(bill.rows[0]);
+    } else {
+      res.status(401);
+      throw new Error("Invalid Bill");
+    }
+  } catch (err) {
+    next(err);
+  }
+};
 
 export async function getInformationBuyVaccine(req, res, next) {
   const userId = req.params.userid;
