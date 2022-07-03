@@ -65,9 +65,15 @@ const Checkout = (props) => {
   const thanhtoanHandler = () => {
     dispatch(
       thanhtoan(billId, {
-        SoTienThanhToan: !billDetail?.hinhthucthanhtoan
-          ? Math.round(paymentPrice)
-          : Math.round(billDetail?.sotienconlai / billDetail?.solanthanhtoan),
+        TongTien: values.totalPrice,
+        SoTienThanhToan:
+          values.paymentMethod === "Thanh toán trả góp"
+            ? Math.round(
+                paymentPrice - (interestRate / 100) * values.totalPrice
+              )
+            : !billDetail?.hinhthucthanhtoan
+            ? Math.round(paymentPrice)
+            : Math.round(billDetail?.sotienconlai / billDetail?.solanthanhtoan),
         HinhThucThanhToan: values.paymentMethod,
         SoLanThanhToan:
           values.paymentMethod === "Thanh toán toàn bộ"

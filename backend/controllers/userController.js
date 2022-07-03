@@ -43,7 +43,8 @@ export const updateProfile = async (req, res, next) => {
 
 export async function updateBill(req, res, next) {
   const billId = req.params.mahoadon;
-  const { SoTienThanhToan, HinhThucThanhToan, SoLanThanhToan } = req.body;
+  const { SoTienThanhToan, HinhThucThanhToan, SoLanThanhToan, TongTien } =
+    req.body;
 
   try {
     const bill = await pool.query("SELECT * FROM HoaDon WHERE MaHD = $1", [
@@ -52,17 +53,17 @@ export async function updateBill(req, res, next) {
 
     if (bill.rowCount > 0) {
       bill.rows[0].sotienconlai -= SoTienThanhToan;
-      console.log(bill.rows[0].sotienconlai);
-      if (bill.rows[0].sotienconlai < 100) {
+      if (bill.rows[0].sotienconlai < 1000) {
         bill.rows[0].sotienconlai = 0;
       }
 
       const updatedBill = await pool.query(
-        "UPDATE HoaDon SET HinhThucThanhToan = $1, SoLanThanhToan = $2, SoTienConLai = $3 WHERE MaHD = $4 RETURNING *",
+        "UPDATE HoaDon SET HinhThucThanhToan = $1, SoLanThanhToan = $2, SoTienConLai = $3, TongTien = $4 WHERE MaHD = $5 RETURNING *",
         [
           HinhThucThanhToan,
           SoLanThanhToan - 1,
           bill.rows[0].sotienconlai,
+          TongTien,
           billId,
         ]
       );
