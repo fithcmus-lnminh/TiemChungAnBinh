@@ -4,6 +4,7 @@ import dktReducer from "./slices/dangkytiemSlice";
 import muaVaccineReducer from "./slices/muaVaccineSlice";
 import userProfileReducer from "./slices/profileSlice";
 import hoadonReducer from "./slices/hoadonSlice";
+import thanhtoanReducer from "./slices/thanhtoanSlice";
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     muavaccine: muaVaccineReducer,
     userProfile: userProfileReducer,
     hoadon: hoadonReducer,
+    thanhtoan: thanhtoanReducer,
   },
 });
 

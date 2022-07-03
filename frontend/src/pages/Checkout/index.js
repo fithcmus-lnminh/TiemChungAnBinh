@@ -14,10 +14,11 @@ import {
 } from "./CheckoutElement";
 import * as Yup from "yup";
 import { Col, Form, Row } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getBillById } from "../../redux/apiRequests/hoadonRequest";
 import { thanhtoan } from "../../redux/apiRequests/thanhtoanRequest";
+import { thanhtoanReset } from "../../redux/slices/thanhtoanSlice";
 
 const Checkout = (props) => {
   const { values, touched, errors, handleChange, handleSubmit, setFieldValue } =
@@ -44,6 +45,9 @@ const Checkout = (props) => {
   const dispatch = useDispatch();
   const { isLoading, billDetail } = useSelector((state) => state.hoadon);
   const { userInfo } = useSelector((state) => state.user);
+  const { isSuccess } = useSelector((state) => state.thanhtoan);
+  const navigate = useNavigate();
+
   useEffect(() => {
     dispatch(getBillById(billId));
   }, [dispatch, billId]);
@@ -67,7 +71,7 @@ const Checkout = (props) => {
         HinhThucThanhToan: values.paymentMethod,
         SoLanThanhToan:
           values.paymentMethod === "Thanh toán toàn bộ"
-            ? 0
+            ? 1
             : values.paymentMethod === "Thanh toán theo đợt" &&
               !billDetail?.hinhthucthanhtoan
             ? values.numOfPayment
@@ -78,6 +82,13 @@ const Checkout = (props) => {
       })
     );
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      navigate("/my-bill");
+      dispatch(thanhtoanReset());
+    }
+  }, [isSuccess, navigate, dispatch]);
 
   return (
     <>

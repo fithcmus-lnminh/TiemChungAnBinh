@@ -19,9 +19,18 @@ const thanhtoanSlice = createSlice({
       state.isLoading = false;
       state.errorMessage = action.payload;
     },
+    thanhtoanReset(state) {
+      state.isLoading = false;
+      state.isSuccess = false;
+      state.errorMessage = "";
+    },
   },
 });
 
-export const { thanhtoanFail, thanhtoanRequest, thanhtoanSuccess } =
-  thanhtoanSlice.actions;
+export const {
+  thanhtoanFail,
+  thanhtoanRequest,
+  thanhtoanSuccess,
+  thanhtoanReset,
+} = thanhtoanSlice.actions;
 export default thanhtoanSlice.reducer;
