@@ -47,11 +47,7 @@ router.get("/lay-tat-ca-khach-hang", isAuth, isAdmin, getAllUsers);
 router.get("/lay-tat-ca-nhan-vien", isAuth, isAdmin, getAllEmployees);
 router.post("/dang-ky-tiem", postRegisterForm);
 router.get("/lay-tat-ca-phieu-tiem", isAuth, getAllRegisterForms);
-router.get(
-  "/lay-danh-sach-phieu-tiem/:userId",
-  isAuth,
-  getRegisterFormByUserId
-);
+router.get("/lay-phieu-tiem/:userId", isAuth, getRegisterFormByUserId);
 router.post("/mua-vaccine", isAuth, postBuyVaccine);
 router.post("/dang-ky-lich-lam-viec", isAuth, isEmployee, postRegisterWork);
 router.get(

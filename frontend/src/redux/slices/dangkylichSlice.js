@@ -6,6 +6,7 @@ const dklSlice = createSlice({
     isLoading: false,
     isSuccess: false,
     errorMessage: "",
+    lichlamviec: [],
   },
   reducers: {
     dangkylichRequest(state) {
@@ -19,9 +20,27 @@ const dklSlice = createSlice({
       state.isLoading = false;
       state.errorMessage = action.payload;
     },
+    laylichRequest(state) {
+      state.isLoading = true;
+    },
+    laylichSuccess(state, action) {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.lichlamviec = action.payload;
+    },
+    laylichFail(state, action) {
+      state.isLoading = false;
+      state.errorMessage = action.payload;
+    },
   },
 });
 
-export const { dangkylichFail, dangkylichRequest, dangkylichSuccess } =
-  dklSlice.actions;
+export const {
+  dangkylichFail,
+  dangkylichRequest,
+  dangkylichSuccess,
+  laylichRequest,
+  laylichSuccess,
+  laylichFail,
+} = dklSlice.actions;
 export default dklSlice.reducer;

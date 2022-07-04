@@ -11,7 +11,7 @@ export const dangkytiem = (obj) => async (dispatch) => {
   try {
     const res = await axios.post("/api/dang-ky-tiem", obj);
     dispatch(dangkytiemSuccess(res.data));
-    console.log(res.data);
+    console.log("dkt", res.data);
     openNotification("success", "Đăng ký tiêm thành công");
   } catch (err) {
     dispatch(

@@ -15,25 +15,110 @@ import {
   getProfile,
   updateProfile,
 } from "../../redux/apiRequests/profileRequest";
+import { getPhieutiemByUserId } from "../../redux/apiRequests/phieutiemRequest";
+import { Table } from "antd";
 
 const Profile = (props) => {
   const { values, touched, errors, handleChange, handleSubmit, setFieldValue } =
     props;
 
   const [isEdit, setIsEdit] = useState(false);
+  const dispatch = useDispatch();
 
   const { isSuccess, errorMessage } = useSelector((state) => state.userProfile);
+  const { userInfo } = useSelector((state) => state.user);
+  const { phieutiemInfo } = useSelector((state) => state.phieutiem);
+
+  console.log(phieutiemInfo);
 
   useEffect(() => {
     isSuccess && setIsEdit(false);
   }, [isSuccess]);
+
+  useEffect(() => {
+    userInfo && dispatch(getPhieutiemByUserId(userInfo.MaTaiKhoan));
+  }, [userInfo, dispatch]);
+
+  const dataSource = phieutiemInfo ?? [];
+  const columns = [
+    {
+      title: "Người tiêm",
+      dataIndex: "hotennguoitiem",
+      key: "hotennguoitiem",
+      width: "20%",
+    },
+    {
+      title: "Ngày sinh",
+      dataIndex: "ngaysinh",
+      key: "ngaysinh",
+      width: "15%",
+      render: (text, record, index) => {
+        const date = new Date(text);
+        const yyyy = date.getFullYear();
+        let mm = date.getMonth() + 1; // Months start at 0!
+        let dd = date.getDate();
+
+        if (dd < 10) dd = "0" + dd;
+        if (mm < 10) mm = "0" + mm;
+
+        return dd + "/" + mm + "/" + yyyy;
+      },
+    },
+
+    {
+      title: "Loại tiêm",
+      dataIndex: "loaitiem",
+      key: "goivaccine",
+      width: "15%",
+    },
+    {
+      title: "Ngày tiêm",
+      dataIndex: "ngaytiem",
+      key: "ngaytiem",
+      width: "15%",
+      render: (text, record, index) => {
+        const date = new Date(text);
+        const yyyy = date.getFullYear();
+        let mm = date.getMonth() + 1; // Months start at 0!
+        let dd = date.getDate();
+
+        if (dd < 10) dd = "0" + dd;
+        if (mm < 10) mm = "0" + mm;
+
+        return dd + "/" + mm + "/" + yyyy;
+      },
+    },
+    {
+      title: "Gói/Loại vaccine",
+      render: (text, record, index) => {
+        return record.loaitiem === "Tiêm theo gói"
+          ? record.goitiem.join(", ")
+          : record.loaivaccine;
+      },
+    },
+    // {
+    //   title: "",
+    //   dataIndex: "action",
+    //   key: "action",
+    //   width: "10%",
+    //   render: (text, record, index) => {
+    //     return (
+    //       <ButtonWrapper>
+    //         <ButtonSubmit small className="m-0">
+    //           Xem chi tiết
+    //         </ButtonSubmit>
+    //       </ButtonWrapper>
+    //     );
+    //   },
+    // },
+  ];
 
   return (
     <>
       <Header />
       <ProfileContainer>
         <Row>
-          <Col md={5}>
+          <Col md={4}>
             <ProfileH2>THÔNG TIN CÁ NHÂN</ProfileH2>
             <ButtonWrapper onClick={() => setIsEdit(true)}>
               <ButtonSubmit small disabled={isEdit}>
@@ -145,8 +230,18 @@ const Profile = (props) => {
               )}
             </Form>
           </Col>
-          <Col md={7}>
-            <ProfileH2>THÔNG TIN ĐĂNG KÝ TIÊM</ProfileH2>
+          <Col className="ms-5">
+            <ProfileH2 className="mb-4">THÔNG TIN ĐĂNG KÝ TIÊM</ProfileH2>
+            {phieutiemInfo?.length === 0 ? (
+              <TextRed italic>Không có thông tin đăng ký tiêm nào!</TextRed>
+            ) : (
+              <Table
+                pagination={{ pageSize: 10, showSizeChanger: false }}
+                dataSource={dataSource}
+                rowKey="mahd"
+                columns={columns}
+              />
+            )}
           </Col>
         </Row>
       </ProfileContainer>

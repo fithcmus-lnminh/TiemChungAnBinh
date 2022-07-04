@@ -20,9 +20,18 @@ const dktSlice = createSlice({
       state.isLoading = false;
       state.errorMessage = action.payload;
     },
+    dangkytiemReset(state) {
+      state.isLoading = false;
+      state.isSuccess = false;
+      state.errorMessage = "";
+    },
   },
 });
 
-export const { dangkytiemFail, dangkytiemRequest, dangkytiemSuccess } =
-  dktSlice.actions;
+export const {
+  dangkytiemFail,
+  dangkytiemRequest,
+  dangkytiemSuccess,
+  dangkytiemReset,
+} = dktSlice.actions;
 export default dktSlice.reducer;

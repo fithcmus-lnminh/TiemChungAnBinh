@@ -9,7 +9,10 @@ import {
 import SchedulerCalendar from "scheduler-calendar";
 import "scheduler-calendar/dist/index.css";
 import { useDispatch, useSelector } from "react-redux";
-import { dangkylichranh } from "../../redux/apiRequests/dklichRequest";
+import {
+  dangkylichranh,
+  laylichtheoUserId,
+} from "../../redux/apiRequests/dklichRequest";
 
 const SignUpFreeDay = () => {
   const [dates, setDates] = useState([]);
@@ -23,14 +26,31 @@ const SignUpFreeDay = () => {
     );
   };
 
+  const { lichlamviec } = useSelector((state) => state.dangkylich);
+  console.log(lichlamviec);
+
+  useEffect(() => {
+    userInfo && dispatch(laylichtheoUserId(userInfo.MaTaiKhoan));
+  }, [userInfo, dispatch]);
+
+  useEffect(() => {
+    setDates(lichlamviec);
+  }, [lichlamviec]);
+
   return (
     <>
       <Header />
       <FreeDayContainer>
         {/* <p>{value}</p> */}
-        <FreeDayH2>ĐĂNG KÝ LỊCH LÀM VIỆC</FreeDayH2>
+        <FreeDayH2>LỊCH LÀM VIỆC</FreeDayH2>
 
         <SchedulerCalendar
+          is24hour
+          isDisabledDateLocked
+          tableContainerStyle="text-center"
+          dayContainerStyle="bg-primary border border-5 border-white"
+          dayTextStyle="text-white"
+          className="px-4"
           availabilities={dates}
           availabilityType={"infinity"}
           duration={10}
@@ -41,7 +61,7 @@ const SignUpFreeDay = () => {
 
         <ButtonWrapper>
           <ButtonSubmit type="submit" onClick={clickHandler}>
-            Đăng ký
+            Thay đổi
           </ButtonSubmit>
         </ButtonWrapper>
       </FreeDayContainer>

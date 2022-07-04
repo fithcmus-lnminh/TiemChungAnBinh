@@ -13,8 +13,10 @@ import {
 import Select from "react-select";
 import { withFormik } from "formik";
 import * as Yup from "yup";
-import { connect, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { dangkytiem } from "../../redux/apiRequests/dktRequest";
+import { useNavigate } from "react-router-dom";
+import { dangkytiemReset } from "../../redux/slices/dangkytiemSlice";
 
 const vaccinePackageData = [
   {
@@ -54,6 +56,16 @@ const SignUpVaccination = (props) => {
       ? (values.isChild = true)
       : (values.isChild = false);
   }, [values]);
+
+  const { isSuccess } = useSelector((state) => state.dangkytiem);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (isSuccess) {
+      navigate("/profile");
+      dispatch(dangkytiemReset());
+    }
+  }, [isSuccess, navigate, dispatch]);
 
   return (
     <>

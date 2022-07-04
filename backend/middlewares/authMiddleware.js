@@ -13,7 +13,7 @@ export const isAuth = async (req, res, next) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
       const res = await pool.query(
-        "SELECT mataikhoan, email, hoten, ngaysinh, dienthoai, gioitinh, diachi, vaitro, mangh FROM TaiKhoan WHERE MaTaiKhoan = $1",
+        "SELECT mataikhoan, email, hoten, ngaysinh, dienthoai, gioitinh, diachi, vaitro, manv FROM TaiKhoan WHERE MaTaiKhoan = $1",
         [decoded.id]
       );
 

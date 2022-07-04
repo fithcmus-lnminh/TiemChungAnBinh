@@ -506,16 +506,35 @@ export async function postRegisterWork(req, res, next) {
   const { thongtinlamviec, manv } = req.body;
 
   try {
-    const registerWork = await pool.query(
-      "INSERT INTO lichlamviec(thongtinlamviec, manv) VALUES ($1, $2) RETURNING *",
-      [thongtinlamviec, parseInt(manv)]
+    const isExisted = await pool.query(
+      "SELECT * FROM lichlamviec WHERE MaNV = $1",
+      [parseInt(manv)]
     );
 
-    if (registerWork.rowCount > 0) {
-      res.status(201).json(registerWork.rows[0]);
+    if (isExisted.rowCount > 0) {
+      const updateWork = await pool.query(
+        "UPDATE lichlamviec SET thongtinlamviec = $1 WHERE manv = $2 RETURNING *",
+        [thongtinlamviec, parseInt(manv)]
+      );
+
+      if (updateWork.rowCount > 0) {
+        res.status(201).json(updateWork.rows[0]);
+      } else {
+        res.status(400);
+        throw new Error("Không thể đăng ký lịch làm việc.");
+      }
     } else {
-      res.status(400);
-      throw new Error("Không thể đăng ký lịch làm việc.");
+      const registerWork = await pool.query(
+        "INSERT INTO lichlamviec(thongtinlamviec, manv) VALUES ($1, $2) RETURNING *",
+        [thongtinlamviec, parseInt(manv)]
+      );
+
+      if (registerWork.rowCount > 0) {
+        res.status(201).json(registerWork.rows[0]);
+      } else {
+        res.status(400);
+        throw new Error("Không thể đăng ký lịch làm việc.");
+      }
     }
   } catch (err) {
     next(err);
@@ -527,12 +546,12 @@ export async function getRegisterWorkByUserId(req, res, next) {
 
   try {
     const registerWork = await pool.query(
-      "SELECT * FROM lichlamviec WHERE manv = $1",
+      "SELECT thongtinlamviec FROM lichlamviec WHERE manv = $1",
       [userId]
     );
 
     if (registerWork.rowCount > 0) {
-      res.status(201).json(registerWork.rows);
+      res.status(201).json(registerWork.rows[0]);
     } else {
       res.status(400);
       throw new Error("Nhân viên này không có lịch làm việc.");

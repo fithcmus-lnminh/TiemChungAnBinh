@@ -7,3 +7,7 @@ font-family: 'Encode Sans Expanded', sans-serif;  box-sizing: border-box;
     font-weight: bold;
 }
 
+.bg-primary {
+    background-color: #2e5185 !important;
+    margin: 2rem !important;
+}

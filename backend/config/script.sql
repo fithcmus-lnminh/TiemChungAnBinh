@@ -17,7 +17,15 @@ CREATE TABLE TaiKhoan (
     GioiTinh VARCHAR(5),
     DiaChi VARCHAR(255),
     VaiTro VARCHAR(50),
-    
+    MaNV INTEGER,
+    FOREIGN KEY (MaNV) REFERENCES nhanvien(manv)
+);
+
+CREATE TABLE nhanvien (
+	manv INTEGER PRIMARY KEY,
+	bangcap varchar(25),
+	luong integer,
+	trungtamlamviec varchar(100)
 );
 
 CREATE TABLE PhieuDangKy (

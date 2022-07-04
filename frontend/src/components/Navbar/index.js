@@ -21,8 +21,6 @@ const Navbar = (props) => {
 
   const { userInfo } = useSelector((state) => state.user);
 
-  console.log(userInfo);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -39,29 +37,26 @@ const Navbar = (props) => {
           <FaBars />
         </MobileIcon>
         <NavMenu>
-          <NavItem>
-            <NavLinks to="/signup-vaccination">Đăng ký tiêm</NavLinks>
-          </NavItem>
-          <NavItem>
-            <NavLinks
-              to={userInfo ? "/buy-vaccine" : "/login?redirect=buy-vaccine"}
-            >
-              Mua vắc xin
-            </NavLinks>
-          </NavItem>
+          {(!userInfo || userInfo?.VaiTro === "Khach Hang") && (
+            <>
+              <NavItem>
+                <NavLinks to="/signup-vaccination">Đăng ký tiêm</NavLinks>
+              </NavItem>
+              <NavItem>
+                <NavLinks
+                  to={userInfo ? "/buy-vaccine" : "/login?redirect=buy-vaccine"}
+                >
+                  Mua vắc xin
+                </NavLinks>
+              </NavItem>
+            </>
+          )}
 
-          <NavItem>
-            <NavLinks
-              to={
-                userInfo ? "/signup-freeday" : "/login?redirect=signup-freeday"
-              }
-            >
-              Đăng ký lịch rảnh
-            </NavLinks>
-          </NavItem>
-          <NavItem>
-            <NavLinks to="/contact">Liên hệ</NavLinks>
-          </NavItem>
+          {(!userInfo || userInfo?.VaiTro === "Khach Hang") && (
+            <NavItem>
+              <NavLinks to="/contact">Liên hệ</NavLinks>
+            </NavItem>
+          )}
         </NavMenu>
         {userInfo ? (
           <div className="d-flex align-items-center justify-content-end">
@@ -75,16 +70,30 @@ const Navbar = (props) => {
                   <i className="fas fa-user me-2"></i>Hồ sơ cá nhân
                 </NavDropdown.Item>
               </Link>
-              <Link to="/my-bill">
-                <NavDropdown.Item as="div">
-                  <i className="fas fa-wallet me-2"></i>Hóa đơn của tôi
-                </NavDropdown.Item>
-              </Link>
-              <Link to="/change-password">
-                <NavDropdown.Item as="div">
-                  <i className="fas fa-key me-2"></i>Đổi mật khẩu
-                </NavDropdown.Item>
-              </Link>
+              {userInfo?.VaiTro === "Khach Hang" && (
+                <Link to="/my-bill">
+                  <NavDropdown.Item as="div">
+                    <i className="fas fa-wallet me-2"></i>Hóa đơn của tôi
+                  </NavDropdown.Item>
+                </Link>
+              )}
+              {(userInfo?.VaiTro === "Y Bac Si" ||
+                userInfo?.VaiTro === "Nhan Vien" ||
+                userInfo?.VaiTro === "Nhan Vien Quan Ly") && (
+                <Link to="/signup-freeday">
+                  <NavDropdown.Item as="div">
+                    <i className="fas fa-calendar me-2"></i>Lịch làm việc
+                  </NavDropdown.Item>
+                </Link>
+              )}
+              {userInfo?.VaiTro === "Nhan Vien Quan Ly" && (
+                <Link to="/signup-freeday">
+                  <NavDropdown.Item as="div">
+                    <i className="fas fa-list-check me-2"></i>Quản lý vắc xin
+                  </NavDropdown.Item>
+                </Link>
+              )}
+
               <NavDropdown.Item onClick={logoutHandler}>
                 <i className="fas fa-arrow-right-from-bracket me-2"></i>
                 Đăng xuất
