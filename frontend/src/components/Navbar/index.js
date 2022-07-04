@@ -87,11 +87,19 @@ const Navbar = (props) => {
                 </Link>
               )}
               {userInfo?.VaiTro === "Nhan Vien Quan Ly" && (
-                <Link to="/signup-freeday">
-                  <NavDropdown.Item as="div">
-                    <i className="fas fa-list-check me-2"></i>Quản lý vắc xin
-                  </NavDropdown.Item>
-                </Link>
+                <>
+                  <Link to="/vaccine-management">
+                    <NavDropdown.Item as="div">
+                      <i className="fas fa-list-check me-2"></i>Quản lý vắc xin
+                    </NavDropdown.Item>
+                  </Link>
+                  <Link to="/signup-management">
+                    <NavDropdown.Item as="div">
+                      <i className="fas fa-list-check me-2"></i>Quản lý phiếu
+                      tiêm
+                    </NavDropdown.Item>
+                  </Link>
+                </>
               )}
 
               <NavDropdown.Item onClick={logoutHandler}>

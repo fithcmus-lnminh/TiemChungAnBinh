@@ -7,6 +7,7 @@ import hoadonReducer from "./slices/hoadonSlice";
 import thanhtoanReducer from "./slices/thanhtoanSlice";
 import phieutiemReducer from "./slices/phieutiemSlice";
 import dklReducer from "./slices/dangkylichSlice";
+import getVacPackage from "./slices/getVacPackage";
 
 const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ const store = configureStore({
     hoadon: hoadonReducer,
     thanhtoan: thanhtoanReducer,
     phieutiem: phieutiemReducer,
+    vaccinelist: getVacPackage,
   },
 });
 

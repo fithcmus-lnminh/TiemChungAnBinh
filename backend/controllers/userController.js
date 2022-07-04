@@ -142,13 +142,33 @@ export async function getBillByUserID(req, res, next) {
   }
 }
 
+export const getAllPackage = async (req, res, next) => {
+  try {
+    const packages = await pool.query("SELECT * FROM danhsachgoitiem");
+
+    res.status(200).json(packages.rows);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getAllVaccine = async (req, res, next) => {
+  try {
+    const vaccines = await pool.query("SELECT * FROM danhsachvaccine");
+
+    res.status(200).json(vaccines.rows);
+  } catch (err) {
+    next(err);
+  }
+};
+
 export async function addVaccinePackage(req, res, next) {
-  const { MaGoi, TenGoi, SoLuong, DonGia } = req.body;
+  const { TenGoi, SoLuong, DonGia } = req.body;
 
   try {
     const vaccinePackage = await pool.query(
-      "INSERT INTO DanhSachGoiTiem(magoi, tengoi, soluong, dongia) VALUES ($1, $2, $3, $4) RETURNING *",
-      [MaGoi, TenGoi, SoLuong, DonGia]
+      "INSERT INTO DanhSachGoiTiem(tengoi, soluong, dongia) VALUES ($1, $2, $3) RETURNING *",
+      [TenGoi, SoLuong, DonGia]
     );
 
     if (vaccinePackage.rowCount > 0) {
@@ -168,12 +188,12 @@ export async function addVaccinePackage(req, res, next) {
 }
 
 export async function addVaccineType(req, res, next) {
-  const { MaVaccine, TenVaccine, SoLuong, DonGia } = req.body;
+  const { TenVaccine, SoLuong, DonGia } = req.body;
 
   try {
     const vaccineType = await pool.query(
-      "INSERT INTO DanhSachVaccine(mavaccine, tenvaccine, soluong, dongia) VALUES ($1, $2, $3, $4) RETURNING *",
-      [MaVaccine, TenVaccine, SoLuong, DonGia]
+      "INSERT INTO DanhSachVaccine(tenvaccine, soluong, dongia) VALUES ($1, $2, $3) RETURNING *",
+      [TenVaccine, SoLuong, DonGia]
     );
 
     if (vaccineType.rowCount > 0) {
