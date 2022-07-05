@@ -16,7 +16,6 @@ export const isAuth = async (req, res, next) => {
         "SELECT mataikhoan, email, hoten, ngaysinh, dienthoai, gioitinh, diachi, vaitro, manv FROM TaiKhoan WHERE MaTaiKhoan = $1",
         [decoded.id]
       );
-
       req.user = res.rows[0];
 
       next();

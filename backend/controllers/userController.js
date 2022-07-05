@@ -144,7 +144,9 @@ export async function getBillByUserID(req, res, next) {
 
 export const getAllPackage = async (req, res, next) => {
   try {
-    const packages = await pool.query("SELECT * FROM danhsachgoitiem");
+    const packages = await pool.query(
+      "SELECT * FROM danhsachgoitiem ORDER BY magoi ASC"
+    );
 
     res.status(200).json(packages.rows);
   } catch (err) {
@@ -154,7 +156,9 @@ export const getAllPackage = async (req, res, next) => {
 
 export const getAllVaccine = async (req, res, next) => {
   try {
-    const vaccines = await pool.query("SELECT * FROM danhsachvaccine");
+    const vaccines = await pool.query(
+      "SELECT * FROM danhsachvaccine ORDER BY mavaccine ASC"
+    );
 
     res.status(200).json(vaccines.rows);
   } catch (err) {
@@ -213,7 +217,8 @@ export async function addVaccineType(req, res, next) {
 }
 
 export async function updateVaccinePackage(req, res, next) {
-  const { MaGoi, TenGoi, SoLuong, DonGia } = req.body;
+  const { TenGoi, SoLuong, DonGia } = req.body;
+  const MaGoi = req.params.id;
 
   try {
     const vaccinePackage = await pool.query(
@@ -238,7 +243,8 @@ export async function updateVaccinePackage(req, res, next) {
 }
 
 export async function updateVaccineType(req, res, next) {
-  const { MaVaccine, TenVaccine, SoLuong, DonGia } = req.body;
+  const { TenVaccine, SoLuong, DonGia } = req.body;
+  const MaVaccine = req.params.id;
 
   try {
     const vaccineType = await pool.query(
@@ -263,7 +269,7 @@ export async function updateVaccineType(req, res, next) {
 }
 
 export async function deleteVaccinePackage(req, res, next) {
-  const MaGoi = req.body;
+  const MaGoi = req.params.id;
 
   try {
     const vaccinePackage = await pool.query(
@@ -288,7 +294,7 @@ export async function deleteVaccinePackage(req, res, next) {
 }
 
 export async function deleteVaccineType(req, res, next) {
-  const { MaVaccine, TenVaccine, SoLuong, DonGia } = req.body;
+  const MaVaccine = req.params.id;
 
   try {
     const vaccineType = await pool.query(
