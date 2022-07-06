@@ -17,37 +17,35 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import { dangkytiem } from "../../redux/apiRequests/dktRequest";
 import { useNavigate } from "react-router-dom";
 import { dangkytiemReset } from "../../redux/slices/dangkytiemSlice";
-
-const vaccinePackageData = [
-  {
-    value: "Gói cho trẻ 0-9 tháng tuổi",
-    label: "Gói cho trẻ 0-9 tháng tuổi",
-  },
-  {
-    value: "Gói cho trẻ 0-12 tháng tuổi",
-    label: "Gói cho trẻ 0-12 tháng tuổi",
-  },
-  {
-    value: "Gói cho trẻ 0-24 tháng tuổi",
-    label: "Gói cho trẻ 0-24 tháng tuổi",
-  },
-  {
-    value: "Gói cho người lớn trên 18 tuổi",
-    label: "Gói cho người lớn trên 18 tuổi",
-  },
-  {
-    value: "Gói cho phụ nữ mang thai",
-    label: "Gói cho phụ nữ mang thai",
-  },
-  {
-    value: "Gói cho người trên 65 tuổi",
-    label: "Gói cho người trên 65 tuổi",
-  },
-];
+import {
+  getAllPackages,
+  getAllVaccines,
+} from "../../redux/apiRequests/getVacPackageRequest";
 
 const SignUpVaccination = (props) => {
   const { values, touched, errors, handleChange, handleSubmit, setFieldValue } =
     props;
+
+  const { packages, vaccines } = useSelector((state) => state.vaccinelist);
+  const dispatch = useDispatch();
+
+  let vaccinePackageData = [];
+  if (packages && vaccines) {
+    for (let p of packages) {
+      vaccinePackageData.push({
+        value: p.tengoi,
+        label: p.tengoi,
+      });
+    }
+  }
+
+  useEffect(() => {
+    dispatch(getAllPackages());
+  }, [dispatch, packages]);
+
+  useEffect(() => {
+    dispatch(getAllVaccines());
+  }, [dispatch, vaccines]);
 
   useEffect(() => {
     const currentYear = new Date().getFullYear();
@@ -59,7 +57,6 @@ const SignUpVaccination = (props) => {
 
   const { isSuccess } = useSelector((state) => state.dangkytiem);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   useEffect(() => {
     if (isSuccess) {
       navigate("/profile");
@@ -306,10 +303,11 @@ const SignUpVaccination = (props) => {
                       <option value="" disabled>
                         Chọn loại vaccine...
                       </option>
-                      <option value="Astrazenca">Astrazenca</option>
-                      <option value="Pfizer">Pfizer</option>
-                      <option value="Mordena">Mordena</option>
-                      <option value="Verocell">Verocell</option>
+                      {vaccines?.map((v, i) => (
+                        <option value={v.tenvaccine} key={i}>
+                          {v.tenvaccine}
+                        </option>
+                      ))}
                     </Form.Control>
                     {errors.typeVaccine && touched.typeVaccine && (
                       <TextRed fontSmall>{errors.typeVaccine}</TextRed>

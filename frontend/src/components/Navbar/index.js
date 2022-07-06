@@ -90,13 +90,19 @@ const Navbar = (props) => {
                 <>
                   <Link to="/vaccine-management">
                     <NavDropdown.Item as="div">
-                      <i className="fas fa-list-check me-2"></i>Quản lý vắc xin
+                      <i className="fas fa-syringe me-2"></i>Quản lý vắc xin
                     </NavDropdown.Item>
                   </Link>
                   <Link to="/signup-management">
                     <NavDropdown.Item as="div">
-                      <i className="fas fa-list-check me-2"></i>Quản lý phiếu
+                      <i className="fas fa-address-card me-2"></i>Quản lý phiếu
                       tiêm
+                    </NavDropdown.Item>
+                  </Link>
+                  <Link to="/bill-management">
+                    <NavDropdown.Item as="div">
+                      <i className="fas fa-file-invoice-dollar me-2"></i>Quản lý
+                      hóa đơn
                     </NavDropdown.Item>
                   </Link>
                 </>

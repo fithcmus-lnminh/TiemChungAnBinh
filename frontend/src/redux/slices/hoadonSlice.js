@@ -21,6 +21,11 @@ const hoadonSlice = createSlice({
       state.isSuccess = true;
       state.billDetail = action.payload;
     },
+    laytatcahoadonSuccess(state, action) {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.allBills = action.payload;
+    },
     layhoadonFail(state, action) {
       state.isLoading = false;
       state.errorMessage = action.payload;
@@ -33,5 +38,6 @@ export const {
   layhoadonRequest,
   layhoadonSuccess,
   layhoadontheoidSuccess,
+  laytatcahoadonSuccess,
 } = hoadonSlice.actions;
 export default hoadonSlice.reducer;

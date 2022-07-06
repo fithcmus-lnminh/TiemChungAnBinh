@@ -5,6 +5,7 @@ import {
   layhoadonRequest,
   layhoadonSuccess,
   layhoadontheoidSuccess,
+  laytatcahoadonSuccess,
 } from "../slices/hoadonSlice";
 
 export const getBillByUserId = (id) => async (dispatch) => {
@@ -28,6 +29,22 @@ export const getBillById = (id) => async (dispatch) => {
   try {
     const { data } = await axios.get(`/api/lay-hoa-don/${id}`);
     dispatch(layhoadontheoidSuccess(data));
+  } catch (err) {
+    dispatch(
+      layhoadonFail(
+        err.response && err.response.data.errors.message
+          ? err.response.data.errors.message
+          : err.message
+      )
+    );
+  }
+};
+
+export const getAllBill = () => async (dispatch) => {
+  dispatch(layhoadonRequest());
+  try {
+    const { data } = await axios.get(`/api/lay-tat-ca-hoa-don`);
+    dispatch(laytatcahoadonSuccess(data));
   } catch (err) {
     dispatch(
       layhoadonFail(

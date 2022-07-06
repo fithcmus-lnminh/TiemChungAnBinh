@@ -96,6 +96,23 @@ export const getBillById = async (req, res, next) => {
   }
 };
 
+export const getAllBills = async (req, res, next) => {
+  try {
+    const bills = await pool.query(
+      "SELECT * FROM HoaDon h, DonMuaVaccine d WHERE h.madonmua = d.madon ORDER BY mahd ASC"
+    );
+
+    if (bills.rowCount > 0) {
+      res.status(200).json(bills.rows);
+    } else {
+      res.status(401);
+      throw new Error("No Bill Found.");
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
 export async function getInformationBuyVaccine(req, res, next) {
   const userId = req.params.userid;
 

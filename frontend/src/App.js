@@ -11,6 +11,8 @@ import SignUpFreeDay from "./pages/SignUpFreeDay";
 import Profile from "./pages/Profile/index";
 import MyBill from "./pages/MyBill";
 import VaccineManagement from "./pages/VaccineManagement.js";
+import PhieuTiemManagement from "./pages/PhieuTiemManagement.js";
+import BillManagement from "./pages/BillManagement";
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/my-bill" element={<MyBill />} />
         <Route path="/vaccine-management" element={<VaccineManagement />} />
+        <Route path="/signup-management" element={<PhieuTiemManagement />} />
+        <Route path="/bill-management" element={<BillManagement />} />
       </Routes>
     </>
   );

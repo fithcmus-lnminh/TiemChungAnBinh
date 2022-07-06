@@ -16,6 +16,11 @@ const phieutiemSlice = createSlice({
       state.isSuccess = true;
       state.phieutiemInfo = action.payload;
     },
+    laytatcaphieutiemSuccess(state, action) {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.allPhieuTiem = action.payload;
+    },
     layphieutiemFail(state, action) {
       state.isLoading = false;
       state.errorMessage = action.payload;
@@ -32,5 +37,6 @@ export const {
   layphieutiemSuccess,
   layphieutiemtheoidSuccess,
   resetPhieutiem,
+  laytatcaphieutiemSuccess,
 } = phieutiemSlice.actions;
 export default phieutiemSlice.reducer;

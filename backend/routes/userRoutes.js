@@ -24,6 +24,7 @@ import {
   getBillById,
   getAllPackage,
   getAllVaccine,
+  getAllBills
 } from "../controllers/userController.js";
 import { isStaff } from "../middlewares/isStaff.js";
 import { isAuth } from "../middlewares/authMiddleware.js";
@@ -37,6 +38,7 @@ router.put("/thanh-toan/:mahoadon", updateBill);
 router.get("/lay-thong-tin-mua-vaccine/:userid", getInformationBuyVaccine);
 router.get("/lay-thong-tin-hoa-don/:userid", getBillByUserID);
 router.get("/lay-hoa-don/:id", getBillById);
+router.get("/lay-tat-ca-hoa-don", getAllBills);
 router.get("/lay-goi-tiem", getAllPackage);
 router.get("/lay-loai-vaccine", getAllVaccine);
 router.post("/them-goi-tiem", addVaccinePackage);
