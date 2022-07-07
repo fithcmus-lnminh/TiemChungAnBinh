@@ -165,9 +165,11 @@ const Checkout = (props) => {
                     <option value="Thanh toán theo đợt">
                       Thanh toán theo đợt
                     </option>
-                    <option value="Thanh toán trả góp">
-                      Thanh toán trả góp
-                    </option>
+                    {values.totalPrice >= 5000000 && (
+                      <option value="Thanh toán trả góp">
+                        Thanh toán trả góp
+                      </option>
+                    )}
                   </Form.Control>
                   {errors.paymentMethod && touched.paymentMethod && (
                     <TextRed fontSmall>{errors.paymentMethod}</TextRed>

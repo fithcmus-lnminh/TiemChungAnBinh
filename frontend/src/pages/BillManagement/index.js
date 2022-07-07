@@ -17,8 +17,6 @@ const BillManagement = () => {
     !allBills && dispatch(getAllBill());
   }, [allBills, dispatch]);
 
-  console.log(allBills);
-
   const dataSource = allBills ?? [];
 
   const columns = [

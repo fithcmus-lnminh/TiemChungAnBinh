@@ -1,5 +1,5 @@
 import { withFormik } from "formik";
-import React from "react";
+import React, { useEffect } from "react";
 import { Col, Form, Row } from "react-bootstrap";
 import { FormGroup, FormLabel, FormWrapper } from "../../components/Form";
 import Header from "../../components/Header";
@@ -13,45 +13,50 @@ import {
 } from "./BuyVaccineElement";
 import * as Yup from "yup";
 import Select from "react-select";
-import { connect, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { muaVaccine } from "../../redux/apiRequests/muaVaccineRequest";
-
-const vaccinePackageData = [
-  {
-    value: "Gói cho trẻ 0-9 tháng tuổi",
-    label: "Gói cho trẻ 0-9 tháng tuổi",
-    price: 1200000,
-  },
-  {
-    value: "Gói cho trẻ 0-12 tháng tuổi",
-    label: "Gói cho trẻ 0-12 tháng tuổi",
-    price: 1500000,
-  },
-  {
-    value: "Gói cho trẻ 0-24 tháng tuổi",
-    label: "Gói cho trẻ 0-24 tháng tuổi",
-    price: 2000000,
-  },
-  {
-    value: "Gói cho người lớn trên 18 tuổi",
-    label: "Gói cho người lớn trên 18 tuổi",
-    price: 2500000,
-  },
-  {
-    value: "Gói cho phụ nữ mang thai",
-    label: "Gói cho phụ nữ mang thai",
-    price: 4000000,
-  },
-  {
-    value: "Gói cho người trên 65 tuổi",
-    label: "Gói cho người trên 65 tuổi",
-    price: 3000000,
-  },
-];
+import {
+  getAllPackages,
+  getAllVaccines,
+} from "../../redux/apiRequests/getVacPackageRequest";
+import { useNavigate } from "react-router-dom";
 
 const BuyVaccine = (props) => {
   const { values, touched, errors, handleChange, handleSubmit, setFieldValue } =
     props;
+
+  const { vaccines, packages } = useSelector((state) => state.vaccinelist);
+  const { isSuccess } = useSelector((state) => state.muavaccine);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    !vaccines && dispatch(getAllVaccines());
+    !packages && dispatch(getAllPackages());
+  }, [vaccines, packages, dispatch]);
+
+  useEffect(() => {
+    isSuccess && navigate("/my-bill");
+  }, [dispatch, isSuccess, navigate]);
+
+  let vaccinePackageData = [];
+
+  if (vaccines && packages) {
+    for (let p of packages) {
+      vaccinePackageData.push({
+        value: p.tengoi,
+        label: p.tengoi,
+        price: p.dongia,
+      });
+    }
+    for (let v of vaccines) {
+      vaccinePackageData.push({
+        value: v.tenvaccine,
+        label: v.tenvaccine,
+        price: v.dongia,
+      });
+    }
+  }
 
   return (
     <>

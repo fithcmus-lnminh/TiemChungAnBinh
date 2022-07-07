@@ -20,6 +20,11 @@ const muaVaccineSlice = createSlice({
       state.isLoading = false;
       state.errorMessage = action.payload;
     },
+    muaVaccineReset(state, action) {
+      state.isSuccess = false;
+      state.isLoading = false;
+      state.info = null;
+    },
   },
 });
 

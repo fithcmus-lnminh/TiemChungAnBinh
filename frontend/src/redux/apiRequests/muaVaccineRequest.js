@@ -19,7 +19,6 @@ export const muaVaccine = (obj) => async (dispatch, getState) => {
 
     const res = await axios.post("/api/mua-vaccine", obj, config);
     dispatch(muaVaccineSuccess(res.data));
-    console.log(res.data);
     openNotification(
       "success",
       "Mua vaccine thành công",
